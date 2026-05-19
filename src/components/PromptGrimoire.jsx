@@ -179,7 +179,7 @@ function FilterBar({ rarity, setRarity, query, setQuery, resultCount }) {
 
 // ─── Spell card ────────────────────────────────────────────────────────────
 
-function SpellCard({ spell, onOpen, onCopy, copied, copyFailed }) {
+function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loading }) {
   const isStarter = spell.id === "static";
   const layout = getCardLayout(spell);
   const difficultyLabel = `Difficulty ${spell.difficulty} out of 5`;
@@ -247,11 +247,11 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed }) {
 
       {/* CTA */}
       <div className="card-actions flex items-center justify-between gap-3 pt-4 border-t border-amber-200/10">
-        <button type="button" className="btn-gilded compact" onClick={() => onCopy(spell)} aria-label={`Copy prompt for ${spell.title}`}>
-          {copyFailed ? "Copy failed" : copied ? "Copied" : "Copy prompt"}
+        <button type="button" className="btn-gilded compact" onClick={() => onCopy(spell)} aria-label={`Copy prompt for ${spell.title}`} disabled={loading}>
+          {loading ? "Loading" : copyFailed ? "Copy failed" : copied ? "Copied" : "Copy prompt"}
         </button>
-        <button type="button" className="btn-ghost compact" onClick={() => onOpen(spell)} aria-label={`View details for ${spell.title}`}>
-          View details
+        <button type="button" className="btn-ghost compact" onClick={() => onOpen(spell)} aria-label={`View details for ${spell.title}`} disabled={loading}>
+          {loading ? "Loading" : "View details"}
         </button>
       </div>
     </article>
@@ -428,7 +428,7 @@ function Stat({ label, value, ariaValue }) {
   );
 }
 
-function CatalogIntro({ totalCount, onOpenStarter, onCopyStarter, copiedStarter }) {
+function CatalogIntro({ totalCount, onOpenStarter, onCopyStarter, copiedStarter, loadingStarter }) {
   return (
     <section className="catalog-intro max-w-6xl mx-auto px-6 mb-8">
       <div>
@@ -443,11 +443,11 @@ function CatalogIntro({ totalCount, onOpenStarter, onCopyStarter, copiedStarter 
         <strong>The Eternal Page</strong>
         <p>Static site or blog with Astro, MDX, content collections, and deployment defaults.</p>
         <div className="flex flex-wrap gap-2">
-          <button type="button" className="btn-gilded compact" onClick={onCopyStarter} aria-label="Copy prompt for The Eternal Page">
-            {copiedStarter ? "Copied" : "Copy prompt"}
+          <button type="button" className="btn-gilded compact" onClick={onCopyStarter} aria-label="Copy prompt for The Eternal Page" disabled={loadingStarter}>
+            {loadingStarter ? "Loading" : copiedStarter ? "Copied" : "Copy prompt"}
           </button>
-          <button type="button" className="btn-ghost compact" onClick={onOpenStarter} aria-label="View details for The Eternal Page">
-            View details
+          <button type="button" className="btn-ghost compact" onClick={onOpenStarter} aria-label="View details for The Eternal Page" disabled={loadingStarter}>
+            {loadingStarter ? "Loading" : "View details"}
           </button>
         </div>
       </div>
@@ -490,17 +490,53 @@ export default function PromptGrimoire({ incantations = [] }) {
   const [open, setOpen] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [copyFailedId, setCopyFailedId] = useState(null);
+  const [loadingId, setLoadingId] = useState(null);
+  const promptCache = useRef(new Map());
 
   const starter = useMemo(() => incantations.find(s => s.id === "static"), [incantations]);
 
+  const loadPrompt = async (spell) => {
+    if (spell.prompt) return spell;
+    if (promptCache.current.has(spell.id)) {
+      return { ...spell, prompt: promptCache.current.get(spell.id) };
+    }
+
+    const response = await fetch(spell.promptUrl);
+    if (!response.ok) throw new Error(`Unable to load prompt for ${spell.id}`);
+    const data = await response.json();
+    promptCache.current.set(spell.id, data.prompt);
+    return { ...spell, prompt: data.prompt };
+  };
+
+  const handleOpen = async (spell) => {
+    setLoadingId(spell.id);
+    setCopyFailedId(null);
+    try {
+      setOpen(await loadPrompt(spell));
+    } catch {
+      setCopyFailedId(spell.id);
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   const handleCopy = async (spell) => {
-    const ok = await copyPrompt(spell.prompt);
-    setCopiedId(ok ? spell.id : null);
-    setCopyFailedId(ok ? null : spell.id);
-    setTimeout(() => {
+    setLoadingId(spell.id);
+    try {
+      const fullSpell = await loadPrompt(spell);
+      const ok = await copyPrompt(fullSpell.prompt);
+      setCopiedId(ok ? spell.id : null);
+      setCopyFailedId(ok ? null : spell.id);
+      setTimeout(() => {
+        setCopiedId(null);
+        setCopyFailedId(null);
+      }, 1800);
+    } catch {
       setCopiedId(null);
-      setCopyFailedId(null);
-    }, 1800);
+      setCopyFailedId(spell.id);
+    } finally {
+      setLoadingId(null);
+    }
   };
 
   const filtered = useMemo(() => {
@@ -516,6 +552,7 @@ export default function PromptGrimoire({ incantations = [] }) {
         s.school.toLowerCase().includes(q)
       );
     }
+    if (rarity === "all" && !q) arr = arr.filter(s => s.id !== "static");
     // sort by rarity asc then difficulty
     return arr.slice().sort((a,b) =>
       RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity) || a.difficulty - b.difficulty
@@ -545,9 +582,10 @@ export default function PromptGrimoire({ incantations = [] }) {
         {starter && (
           <CatalogIntro
             totalCount={incantations.length}
-            onOpenStarter={() => setOpen(starter)}
+            onOpenStarter={() => handleOpen(starter)}
             onCopyStarter={() => handleCopy(starter)}
             copiedStarter={copiedId === starter.id}
+            loadingStarter={loadingId === starter.id}
           />
         )}
 
@@ -559,10 +597,11 @@ export default function PromptGrimoire({ incantations = [] }) {
               <SpellCard
                 key={s.id}
                 spell={s}
-                onOpen={setOpen}
+                onOpen={handleOpen}
                 onCopy={handleCopy}
                 copied={copiedId === s.id}
                 copyFailed={copyFailedId === s.id}
+                loading={loadingId === s.id}
               />
             ))}
           </div>

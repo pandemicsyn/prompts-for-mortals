@@ -7,7 +7,7 @@ const title = "Prompts for Mere Mortals";
 const description =
   "A curated library of opinionated AI coding prompts for Claude, Codex, and other coding assistants. Pick a stack, copy a prompt, and start with stronger defaults.";
 const incantations: Array<Record<string, unknown>> = (await getCollection("incantations"))
-  .map(({ body, data }) => ({ ...data, prompt: (body ?? "").trim() }));
+  .map(({ data }) => ({ ...data, promptUrl: `/api/incantations/${encodeURIComponent(data.id)}.json` }));
 ---
 
 <!doctype html>
