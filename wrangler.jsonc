@@ -1,0 +1,14 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "prompts-for-mortals",
+	"compatibility_date": "2026-05-16",
+	"routes": [
+		{
+			"pattern": "promptsformortals.com",
+			"custom_domain": true
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

@@ -1,0 +1,716 @@
+@import "tailwindcss";
+@import "@fontsource/cinzel/latin-400.css";
+@import "@fontsource/cinzel/latin-600.css";
+@import "@fontsource/cinzel/latin-700.css";
+@import "@fontsource/eb-garamond/latin-400.css";
+@import "@fontsource/eb-garamond/latin-400-italic.css";
+@import "@fontsource/eb-garamond/latin-600.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-600.css";
+
+/* Prompts for Mere Mortals, illuminated grimoire styling */
+
+:root {
+  --ink: oklch(14.5% 0.035 304);
+  --ink-2: oklch(18% 0.045 304);
+  --ink-3: oklch(23% 0.055 304);
+  --parchment: oklch(89% 0.055 86);
+  --parchment-dark: oklch(80% 0.07 86);
+  --parchment-shadow: oklch(55% 0.08 84);
+  --gilded: oklch(70% 0.13 82);
+  --gilded-bright: oklch(84% 0.12 86);
+  --oxblood: oklch(35% 0.14 28);
+  --forest: oklch(39% 0.08 150);
+  --royal: oklch(39% 0.11 288);
+  --surface: oklch(18% 0.04 304);
+  --surface-2: oklch(23% 0.05 304);
+  --surface-soft: oklch(89% 0.055 86 / 0.06);
+  --line: oklch(89% 0.055 86 / 0.16);
+  --line-strong: oklch(84% 0.12 86 / 0.42);
+  --text-muted: oklch(96% 0.05 86 / 0.68);
+  --action: oklch(75% 0.13 84);
+  --action-strong: oklch(84% 0.12 86);
+  --action-deep: oklch(62% 0.13 78);
+  --control-border: oklch(39% 0.09 80);
+  --focus: oklch(88% 0.11 88);
+  --modal-ink: oklch(23% 0.045 70);
+  --modal-line: oklch(38% 0.06 78 / 0.24);
+  --light-glint: oklch(96% 0.008 86);
+  --mask-ink: oklch(12% 0.03 304);
+  --shadow-soft: oklch(12% 0.03 304 / 0.2);
+  --shadow-outline: oklch(12% 0.03 304 / 0.26);
+  --shadow-medium: oklch(12% 0.03 304 / 0.4);
+  --shadow-heavy: oklch(12% 0.03 304 / 0.5);
+  --shadow-deep: oklch(12% 0.03 304 / 0.6);
+  --card-glint: oklch(96% 0.008 86 / 0.04);
+  --card-glint-hover: oklch(96% 0.008 86 / 0.06);
+  --field-wash: oklch(96% 0.008 86 / 0.025);
+  --button-glint: oklch(96% 0.008 86 / 0.4);
+  --night-royal-haze: oklch(39% 0.11 288 / 0.22);
+  --night-gold-haze: oklch(70% 0.13 82 / 0.08);
+  --night-forest-haze: oklch(39% 0.08 150 / 0.16);
+  --star-bright: oklch(96% 0.008 86 / 0.36);
+  --star-medium: oklch(96% 0.008 86 / 0.28);
+  --star-soft: oklch(96% 0.008 86 / 0.20);
+  --star-clear: oklch(96% 0.008 86 / 0.30);
+  --star-dim: oklch(96% 0.008 86 / 0.24);
+  --star-faint: oklch(96% 0.008 86 / 0.22);
+  --stat-empty: oklch(31% 0.035 289);
+  --glyph-core: oklch(13% 0.035 304);
+  --scroll-grain-gold: oklch(52% 0.08 74 / 0.20);
+  --scroll-grain-red: oklch(35% 0.14 28 / 0.10);
+  --scroll-grain-ink: oklch(12% 0.03 304 / 0.04);
+  --scroll-edge-top: oklch(70% 0.10 82);
+  --scroll-edge-mid: oklch(54% 0.10 82);
+  --scroll-edge-bottom: oklch(36% 0.08 82);
+  --prompt-surface: oklch(18% 0.04 304);
+  --prompt-text: oklch(86% 0.075 86);
+  --prompt-border: oklch(27% 0.055 294);
+  --prompt-inner-line: oklch(70% 0.13 82 / 0.15);
+  --tag-bg: oklch(70% 0.13 82 / 0.06);
+  --tag-border: oklch(70% 0.13 82 / 0.18);
+  --tag-text: oklch(86% 0.075 86);
+  --starter-panel-wash: oklch(84% 0.12 86 / 0.10);
+  --starter-panel-sheen: oklch(96% 0.008 86 / 0.035);
+  --catalog-count: oklch(84% 0.12 86 / 0.58);
+  --search-clear-bg: oklch(89% 0.055 86 / 0.08);
+  --modal-tag-bg: oklch(35% 0.14 28 / 0.08);
+  --modal-tag-border: oklch(35% 0.14 28 / 0.25);
+  --modal-stat-bg: oklch(90% 0.055 86 / 0.34);
+  --scrim-core: oklch(39% 0.11 288 / 0.25);
+  --scrim-edge: oklch(12% 0.03 304 / 0.85);
+
+  /* WoW/Diablo rarity */
+  --r-common: oklch(76% 0.01 280);
+  --r-rare: oklch(64% 0.16 257);
+  --r-epic: oklch(62% 0.20 310);
+  --r-legendary: oklch(72% 0.17 54);
+}
+
+* { -webkit-font-smoothing: antialiased; }
+
+html, body {
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: "EB Garamond", "Iowan Old Style", "Palatino", serif;
+}
+
+/* Starfield night-sky background built only from CSS gradients */
+.night-sky {
+  background:
+    radial-gradient(ellipse at 20% 0%, var(--night-royal-haze), transparent 50%),
+    radial-gradient(ellipse at 85% 10%, var(--night-gold-haze), transparent 45%),
+    radial-gradient(ellipse at 50% 100%, var(--night-forest-haze), transparent 60%),
+    radial-gradient(circle at 12% 22%, var(--star-bright) 0.5px, transparent 1.2px),
+    radial-gradient(circle at 73% 18%, var(--star-medium) 0.5px, transparent 1.2px),
+    radial-gradient(circle at 38% 47%, var(--star-soft) 0.5px, transparent 1.2px),
+    radial-gradient(circle at 88% 62%, var(--star-clear) 0.6px, transparent 1.4px),
+    radial-gradient(circle at 22% 78%, var(--star-dim) 0.5px, transparent 1.2px),
+    radial-gradient(circle at 94% 33%, var(--star-faint) 0.5px, transparent 1.1px),
+    var(--ink);
+}
+
+/* Display type */
+.font-display { font-family: "Cinzel", "Trajan Pro", serif; letter-spacing: 0; }
+.font-body { font-family: "EB Garamond", "Iowan Old Style", "Palatino", serif; }
+.font-mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
+
+/* Drop cap initial */
+.drop-cap::first-letter {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 3.5em;
+  float: left;
+  line-height: 0.85;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--oxblood);
+  text-shadow: 0 0 1px var(--shadow-soft);
+}
+
+.gilded {
+  color: var(--gilded-bright);
+  filter: drop-shadow(0 1px 0 var(--shadow-medium));
+}
+
+/* Ornate divider (CSS only, no custom SVG) */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--gilded);
+}
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gilded) 40%, var(--gilded) 60%, transparent);
+}
+.divider .glyph {
+  font-family: "Cinzel", serif;
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+/* Rarity halos */
+.rarity-common    { --r: var(--r-common); }
+.rarity-rare      { --r: var(--r-rare); }
+.rarity-epic      { --r: var(--r-epic); }
+.rarity-legendary { --r: var(--r-legendary); }
+
+.spell-catalog {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: clamp(1rem, 1.6vw, 1.55rem);
+  align-items: stretch;
+}
+
+.spell-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 100%;
+  grid-column: span 4;
+  border: 1px solid color-mix(in oklch, var(--r) 34%, var(--ink-3));
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+  box-shadow:
+    inset 0 1px 0 var(--card-glint),
+    0 1px 0 var(--shadow-heavy),
+    0 0 0 1px var(--shadow-outline);
+}
+.spell-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, color-mix(in oklch, var(--r) 70%, transparent), transparent 40%, color-mix(in oklch, var(--r) 30%, transparent));
+  -webkit-mask: linear-gradient(var(--mask-ink) 0 0) content-box, linear-gradient(var(--mask-ink) 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.38;
+}
+.spell-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklch, var(--r) 62%, var(--light-glint));
+  box-shadow:
+    inset 0 1px 0 var(--card-glint-hover),
+    0 16px 34px -22px color-mix(in oklch, var(--r) 42%, transparent),
+    0 0 0 1px color-mix(in oklch, var(--r) 24%, transparent);
+}
+
+.spell-card-feature {
+  grid-column: span 8;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.92fr) minmax(0, 1.35fr);
+  column-gap: clamp(1.2rem, 2vw, 2rem);
+  align-content: start;
+}
+
+.spell-card-feature.rarity-legendary {
+  grid-column: span 12;
+  grid-template-columns: minmax(220px, 0.78fr) minmax(0, 1.62fr);
+}
+
+.spell-card-folio,
+.spell-card-chapter {
+  grid-column: span 6;
+}
+
+.spell-card-leaf {
+  grid-column: span 4;
+}
+
+.spell-card-feature > .flex:first-child {
+  grid-row: span 4;
+  display: grid;
+  align-content: space-between;
+  min-height: 100%;
+  margin-bottom: 0;
+  padding-right: clamp(0.35rem, 1vw, 0.9rem);
+  border-right: 1px solid var(--line);
+}
+
+.spell-card-feature .glyph-disc {
+  width: clamp(64px, 8vw, 92px);
+  height: clamp(64px, 8vw, 92px);
+}
+
+.spell-card-feature h3 {
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  max-width: 8.5em;
+}
+
+.spell-card-feature .card-summary {
+  max-width: 42ch;
+}
+
+.spell-card-folio {
+  padding-block: 1.85rem;
+}
+
+.spell-card-folio .glyph-disc {
+  width: 64px;
+  height: 64px;
+}
+
+.spell-card-chapter h3 {
+  max-width: 10em;
+}
+
+.starter-card {
+  border-color: color-mix(in oklch, var(--action) 50%, var(--ink-3));
+}
+
+.starter-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--action-strong);
+  border-radius: 2px;
+  padding: 0.28rem 0.44rem;
+}
+
+/* Rarity pill */
+.rarity-pill {
+  font-family: "Cinzel", serif;
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--r);
+  color: var(--r);
+  background: color-mix(in oklch, var(--r) 12%, transparent);
+  border-radius: 2px;
+}
+
+/* Stat dot */
+.stat-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--gilded);
+  box-shadow: 0 0 6px color-mix(in oklch, var(--gilded) 60%, transparent);
+}
+.stat-dot.dim { background: var(--stat-empty); box-shadow: none; }
+
+/* School glyph circle */
+.glyph-disc {
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, color-mix(in oklch, var(--r) 52%, var(--light-glint)) 0%, color-mix(in oklch, var(--r) 22%, var(--glyph-core)) 60%, var(--glyph-core) 100%);
+  border: 1px solid color-mix(in oklch, var(--r) 60%, transparent);
+  box-shadow: inset 0 0 12px var(--shadow-deep);
+}
+
+/* Modal scroll */
+.scroll-body {
+  background: var(--parchment);
+  background-image:
+    radial-gradient(ellipse at 10% 10%, var(--scroll-grain-gold), transparent 50%),
+    radial-gradient(ellipse at 90% 90%, var(--scroll-grain-red), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, var(--scroll-grain-ink), transparent 70%);
+}
+.scroll-edge-top, .scroll-edge-bottom {
+  height: 28px;
+  background:
+    radial-gradient(ellipse 60% 100% at 50% 0%, var(--scroll-edge-top) 0%, var(--scroll-edge-mid) 60%, var(--scroll-edge-bottom) 100%);
+  position: relative;
+}
+.scroll-edge-top { border-radius: 8px 8px 0 0; box-shadow: inset 0 -3px 6px var(--shadow-medium); }
+.scroll-edge-bottom { border-radius: 0 0 8px 8px; box-shadow: inset 0 3px 6px var(--shadow-medium); }
+
+/* Prompt code block — ink on parchment */
+.incantation-block {
+  background: var(--prompt-surface);
+  color: var(--prompt-text);
+  border: 1px solid var(--prompt-border);
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--prompt-inner-line), inset 0 0 30px var(--shadow-medium);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Buttons */
+.btn-gilded {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  padding: 0.6rem 1.1rem;
+  min-height: 44px;
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--action-strong) 0%, var(--action) 70%, var(--action-deep) 100%);
+  border: 1px solid var(--control-border);
+  box-shadow: inset 0 1px 0 var(--button-glint), 0 1px 0 var(--shadow-medium);
+  border-radius: 3px;
+  transition: transform 120ms ease, filter 120ms ease;
+  cursor: pointer;
+}
+.btn-gilded:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-gilded:active { transform: translateY(0); filter: brightness(0.95); }
+
+.btn-ghost {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  padding: 0.5rem 0.9rem;
+  min-height: 44px;
+  color: var(--action-strong);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms ease, filter 120ms ease;
+}
+.btn-ghost:hover { background: color-mix(in oklch, var(--action) 12%, transparent); color: var(--action-strong); }
+.btn-ghost:active { transform: translateY(1px); }
+
+.btn-gilded.compact,
+.btn-ghost.compact {
+  font-size: 0.68rem;
+  padding: 0.55rem 0.82rem;
+  min-height: 44px;
+}
+
+.card-actions {
+  min-height: 57px;
+}
+
+.btn-gilded:focus-visible,
+.btn-ghost:focus-visible,
+.filter-pill:focus-visible,
+.search-clear:focus-visible,
+.spell-card button:focus-visible,
+nav a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* School select pills */
+.filter-pill {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  min-height: 44px;
+  padding: 0.64rem 0.92rem;
+  color: color-mix(in oklch, var(--parchment) 60%, transparent);
+  border: 1px solid var(--line);
+  background: var(--field-wash);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+.filter-pill:hover { color: var(--parchment); border-color: var(--gilded); }
+.filter-pill.active {
+  color: var(--gilded-bright);
+  border-color: var(--gilded);
+  background: color-mix(in oklch, var(--gilded) 8%, transparent);
+  box-shadow: inset 0 0 12px color-mix(in oklch, var(--gilded) 20%, transparent);
+}
+.filter-pill.active.rarity-common,
+.filter-pill.active.rarity-rare,
+.filter-pill.active.rarity-epic,
+.filter-pill.active.rarity-legendary {
+  color: var(--r);
+  border-color: var(--r);
+  box-shadow: inset 0 0 12px color-mix(in oklch, var(--r) 24%, transparent);
+}
+
+/* Tag */
+.tag-mono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  padding: 0.15rem 0.45rem;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+  border-radius: 2px;
+}
+
+.catalog-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+  gap: 1.5rem;
+  align-items: stretch;
+  position: relative;
+}
+
+.catalog-intro > div:first-child {
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+}
+
+.starter-panel {
+  border: 1px solid color-mix(in oklch, var(--action) 36%, var(--ink-3));
+  background: linear-gradient(180deg, var(--starter-panel-wash), var(--starter-panel-sheen));
+  border-radius: 6px;
+  padding: 1.1rem;
+}
+
+.starter-panel strong {
+  display: block;
+  margin-top: 0.45rem;
+  margin-bottom: 0.3rem;
+  font-family: "Cinzel", serif;
+  font-size: 1.25rem;
+  color: var(--parchment);
+}
+
+.starter-panel p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.catalog-count {
+  grid-column: 1 / -1;
+  color: var(--catalog-count);
+}
+
+.catalog-toolbar {
+  border-top: 1px solid var(--line);
+  padding-top: 1.2rem;
+}
+
+.search-field {
+  display: grid;
+  gap: 0.45rem;
+  position: relative;
+  width: 100%;
+}
+
+.search-field input {
+  min-height: 44px;
+  padding-right: 4.25rem;
+}
+
+.search-field input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.search-clear {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  min-height: 32px;
+  padding: 0 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--search-clear-bg);
+  color: var(--parchment);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.modal-kicker,
+.modal-title {
+  color: var(--oxblood);
+}
+
+.modal-divider {
+  color: var(--parchment-shadow);
+}
+
+.modal-bullet,
+.modal-tag {
+  color: var(--oxblood);
+}
+
+.modal-tag {
+  background: var(--modal-tag-bg);
+  border: 1px solid var(--modal-tag-border);
+}
+
+.modal-stat {
+  border: 1px solid var(--modal-line);
+  border-radius: 2px;
+  padding: 0.75rem 0.5rem;
+  background: var(--modal-stat-bg);
+}
+
+.modal-stat-label {
+  color: var(--parchment-shadow);
+}
+
+.scroll-body button:focus-visible {
+  outline: 2px solid var(--oxblood);
+  outline-offset: 3px;
+}
+
+/* Modal backdrop */
+.scrim {
+  background: radial-gradient(ellipse at center, var(--scrim-core), var(--scrim-edge) 70%);
+  backdrop-filter: blur(8px);
+}
+
+/* Decorative top banner */
+.banner-edge {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gilded) 30%, var(--gilded) 70%, transparent);
+}
+
+/* Tiny mono caption */
+.caption-mono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--gilded) 70%, transparent);
+}
+
+.site-nav a,
+.footer-return {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .spell-card,
+  .spell-card-folio,
+  .spell-card-chapter,
+  .spell-card-leaf {
+    grid-column: span 6;
+  }
+
+  .spell-card-feature {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 767px) {
+  .caption-mono {
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+
+  .site-nav {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .site-nav > div:last-child {
+    gap: 0.75rem;
+  }
+
+  .search-clear {
+    font-size: 0.875rem;
+    min-height: 44px;
+  }
+
+  .catalog-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .spell-catalog {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .spell-card,
+  .spell-card-feature,
+  .spell-card-feature.rarity-legendary,
+  .spell-card-folio,
+  .spell-card-chapter,
+  .spell-card-leaf {
+    grid-column: 1 / -1;
+  }
+
+  .spell-card-feature {
+    display: flex;
+  }
+
+  .spell-card-feature > .flex:first-child {
+    display: flex;
+    min-height: auto;
+    margin-bottom: 1rem;
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .spell-card-feature .glyph-disc,
+  .spell-card-folio .glyph-disc {
+    width: 56px;
+    height: 56px;
+  }
+
+  .spell-card-feature h3 {
+    font-size: 1.875rem;
+    max-width: none;
+  }
+
+  .card-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .card-actions .btn-gilded,
+  .card-actions .btn-ghost {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .btn-gilded.compact,
+  .btn-ghost.compact,
+  .footer-return {
+    font-size: 0.875rem;
+    line-height: 1.1;
+    min-height: 44px;
+    padding-inline: 1rem;
+  }
+
+  .filter-pill {
+    font-size: 0.875rem;
+    line-height: 1.1;
+    padding-inline: 1rem;
+  }
+
+  .rarity-pill,
+  .starter-label {
+    font-size: 0.875rem;
+    line-height: 1.1;
+  }
+
+  .tag-mono {
+    font-size: 0.875rem;
+    line-height: 1.25;
+    padding: 0.25rem 0.55rem;
+  }
+
+  .spell-card .text-xs {
+    font-size: 0.875rem;
+    line-height: 1.3;
+  }
+
+  .modal-tag {
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+
+  .modal-stat .font-display {
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

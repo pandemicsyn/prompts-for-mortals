@@ -1,0 +1,32 @@
+{
+  "name": "prompts-for-mortals",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "deploy": "ASTRO_TELEMETRY_DISABLED=1 astro build && wrangler deploy",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^13.5.1",
+    "@astrojs/react": "^5.0.5",
+    "@fontsource/cinzel": "^5.2.7",
+    "@fontsource/eb-garamond": "^5.2.7",
+    "@fontsource/jetbrains-mono": "^5.2.7",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^6.0.2",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.54.0"
+  }
+}
