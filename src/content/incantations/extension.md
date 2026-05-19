@@ -21,10 +21,22 @@ You are building a browser extension. Follow these constraints EXACTLY:
 - Manifest V3
 - pnpm
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
-1. `pnpm dlx wxt@latest init` — pick React + TypeScript.
-2. Verify `pnpm dev` opens a Chrome profile with the extension loaded.
-3. Add Tailwind per WXT's official guide. In content scripts, mount React into a shadow root.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. `pnpm dlx wxt@latest init` — pick React + TypeScript.
+3. Verify `pnpm dev` opens a Chrome profile with the extension loaded.
+4. Add Tailwind per WXT's official guide. In content scripts, mount React into a shadow root.
+
+# Quality gates
+- Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript`.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
+- Run `pnpm run check` and `pnpm wxt build` before saying the work is done.
+- Manually verify at least one Chromium profile load and, when Firefox support is in scope, one Firefox build.
 
 # Architecture (WXT entrypoints)
 - `entrypoints/popup/` — the toolbar popup. Small. One job.

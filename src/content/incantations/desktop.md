@@ -21,11 +21,23 @@ You are building a cross-platform desktop application. Follow these constraints 
 - pnpm as the package manager
 - Biome for lint+format (NOT eslint+prettier)
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
-1. Run `pnpm create tauri-app@latest` and pick: React, TypeScript, Vite, pnpm.
-2. Add Tailwind v4 via `@tailwindcss/vite`. Configure dark mode via `class` on <html>.
-3. Set up Biome with `pnpm dlx @biomejs/biome init`.
-4. Add a `pnpm tauri dev` script and verify the window opens.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. Run `pnpm create tauri-app@latest` and pick: React, TypeScript, Vite, pnpm.
+3. Add Tailwind v4 via `@tailwindcss/vite`. Configure dark mode via `class` on <html>.
+4. Set up Biome with `pnpm dlx @biomejs/biome init`.
+5. Add a `pnpm tauri dev` script and verify the window opens.
+
+# Quality gates
+- Use Biome here because this stack explicitly chose it. Do not add ESLint or Prettier.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `biome lint .`, `lint:fix` = `biome lint --write .`, `fmt` = `biome format --write .`, `fmt:check` = `biome ci .`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check`.
+- Add Rust checks: `cargo fmt --manifest-path src-tauri/Cargo.toml --check`, `cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings`, and `cargo test --manifest-path src-tauri/Cargo.toml`.
+- Run the JS checks, Rust checks, and `pnpm tauri build` or a clearly scoped dev build before saying the work is done.
 
 # Architecture
 - Frontend lives in `src/`. Rust commands live in `src-tauri/src/commands/`.

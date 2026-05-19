@@ -22,11 +22,23 @@ You are building a mobile app for iOS and Android using Expo. Follow these const
 - Zustand for global state, TanStack Query for server state
 - expo-sqlite + Drizzle ORM for local persistence
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
-1. `pnpm create expo-app@latest --template default`
-2. Add NativeWind v4 following the official Expo Router instructions exactly.
-3. Set up Expo Router with a `(tabs)` group and a stack for modals.
-4. Configure path aliases (`@/` → `./src/`) in both tsconfig and babel.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. `pnpm create expo-app@latest --template default`
+3. Add NativeWind v4 following the official Expo Router instructions exactly.
+4. Set up Expo Router with a `(tabs)` group and a stack for modals.
+5. Configure path aliases (`@/` → `./src/`) in both tsconfig and babel.
+
+# Quality gates
+- Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript`.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
+- Keep an Expo health script such as `doctor` = `expo-doctor` when the project includes native dependencies.
+- Run `pnpm run check` and verify the app in Expo Go before saying the work is done.
 
 # Architecture
 - `app/` is routes only. Components live in `src/components/`. Business logic in `src/lib/`.

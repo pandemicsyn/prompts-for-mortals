@@ -25,12 +25,24 @@ You are building a full-stack web application. Follow these constraints EXACTLY:
 - Hosted on Cloudflare Workers via OpenNext for Cloudflare. Use Pages only when the app is truly static and has no server behavior.
 - Database: Neon Postgres via Cloudflare Hyperdrive for serious relational workloads; Cloudflare D1 when SQLite is the right fit
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
-1. `pnpm create next-app@latest --typescript --tailwind --app --src-dir --import-alias "@/*"`
-2. Add shadcn: `pnpm dlx shadcn@latest init` — pick neutral, CSS variables, RSC=yes.
-3. Install Drizzle: `pnpm add drizzle-orm postgres` + `pnpm add -D drizzle-kit`. Schema in `src/db/schema.ts`.
-4. Install Better Auth following its Next.js + Drizzle quickstart. Wire it BEFORE building any pages.
-5. Add OpenNext for Cloudflare + Wrangler deployment config before production polish. The deploy script should build the app and run `wrangler deploy`.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. `pnpm create next-app@latest --typescript --tailwind --app --src-dir --import-alias "@/*"`
+3. Add shadcn: `pnpm dlx shadcn@latest init` — pick neutral, CSS variables, RSC=yes.
+4. Install Drizzle: `pnpm add drizzle-orm postgres` + `pnpm add -D drizzle-kit`. Schema in `src/db/schema.ts`.
+5. Install Better Auth following its Next.js + Drizzle quickstart. Wire it BEFORE building any pages.
+6. Add OpenNext for Cloudflare + Wrangler deployment config before production polish. The deploy script should build the app and run `wrangler deploy`.
+
+# Quality gates
+- Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript`.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
+- Keep `build` and `deploy` scripts explicit. `deploy` should build with OpenNext, then run `wrangler deploy`.
+- Run `pnpm run check` and `pnpm run build` before saying the work is done.
 
 # Architecture
 - Routes in `src/app/`. Group authed pages under `(app)/` with a layout that calls `auth.api.getSession` server-side and redirects if missing.

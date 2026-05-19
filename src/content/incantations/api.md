@@ -23,11 +23,23 @@ You are building an HTTP API. Follow these constraints EXACTLY:
 - TypeScript, strict
 - pnpm
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
-1. `pnpm create cloudflare@latest -- --type=hello-world --ts`
-2. `pnpm add hono @hono/zod-validator zod drizzle-orm`
-3. For D1: `wrangler d1 create <name>`, paste binding into wrangler.toml.
-4. Drizzle config: `drizzle.config.ts` pointed at `src/db/schema.ts`.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. `pnpm create cloudflare@latest -- --type=hello-world --ts`
+3. `pnpm add hono @hono/zod-validator zod drizzle-orm`
+4. For D1: `wrangler d1 create <name>`, paste binding into wrangler.toml.
+5. Drizzle config: `drizzle.config.ts` pointed at `src/db/schema.ts`.
+
+# Quality gates
+- Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript @cloudflare/vitest-pool-workers`.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
+- Use Workers-aware tests for route handlers and bindings. Do not mock Cloudflare APIs when the local Workers test pool can exercise them.
+- Run `pnpm run check` and a deploy dry run or production build before saying the work is done.
 
 # Architecture
 - `src/index.ts` — composes the app. Imports route modules and mounts them.

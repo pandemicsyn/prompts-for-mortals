@@ -22,11 +22,27 @@ You are building a command-line tool. Follow these constraints EXACTLY:
 - picocolors for color (NOT chalk, it's 14x larger)
 - zod for validating config files and API responses
 
+# Supply-chain defaults
+- Use Bun's package manager.
+- Add and commit `bunfig.toml` before installing dependencies:
+  ```toml
+  [install]
+  minimumReleaseAge = 259200
+  ```
+- Three days is the default age gate for direct and transitive package resolution. Do not add `minimumReleaseAgeExcludes` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
 1. `bun init -y`
-2. Add deps: `bun add commander @clack/prompts picocolors zod`
-3. Set `"bin": { "your-cli": "./dist/cli.js" }` in package.json.
-4. Add a build script: `bun build src/cli.ts --compile --outfile dist/your-cli`
+2. Create `bunfig.toml` with `[install] minimumReleaseAge = 259200`.
+3. Add deps: `bun add commander @clack/prompts picocolors zod`
+4. Set `"bin": { "your-cli": "./dist/cli.js" }` in package.json.
+5. Add a build script: `bun build src/cli.ts --compile --outfile dist/your-cli`
+
+# Quality gates
+- Install quality tooling before feature work: `bun add -D oxlint oxfmt typescript`.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `bun test`, `check` = `bun run typecheck && bun run lint && bun run fmt:check && bun run test`.
+- Keep `build` explicit and make it produce a local binary from the TypeScript entrypoint.
+- Run `bun run check` and the compiled binary's `--help` before saying the work is done.
 
 # Architecture
 - Entry: `src/cli.ts` ONLY wires the program. Each subcommand is its own file in `src/commands/`.

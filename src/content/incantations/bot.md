@@ -22,14 +22,26 @@ You are building a Discord bot using HTTP interactions on Cloudflare Workers. Fo
 - TypeScript, strict
 - Wrangler for deploy
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Why HTTP interactions
 The websocket gateway requires an always-on process. HTTP interactions let Discord POST to your Worker URL. Free, instant cold-start, no scaling drama.
 
 # Bootstrapping
-1. `pnpm create cloudflare@latest -- --type=hello-world --ts`
-2. Add deps: `pnpm add hono discord-interactions`
-3. In Discord Developer Portal: create app, copy PUBLIC_KEY, APPLICATION_ID, BOT_TOKEN. Put PUBLIC_KEY and APP_ID as Worker secrets via `wrangler secret put`.
-4. Set the "Interactions Endpoint URL" to your Worker URL. Discord will verify it.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. `pnpm create cloudflare@latest -- --type=hello-world --ts`
+3. Add deps: `pnpm add hono discord-interactions`
+4. In Discord Developer Portal: create app, copy PUBLIC_KEY, APPLICATION_ID, BOT_TOKEN. Put PUBLIC_KEY and APP_ID as Worker secrets via `wrangler secret put`.
+5. Set the "Interactions Endpoint URL" to your Worker URL. Discord will verify it.
+
+# Quality gates
+- Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript @cloudflare/vitest-pool-workers`.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
+- Test signature verification, command dispatch, and deferred replies with Workers-aware tests.
+- Run `pnpm run check` and a deploy dry run or production build before saying the work is done.
 
 # Architecture
 - `src/index.ts` — Hono app with one POST route. Verify signature with `verifyKey` from discord-interactions. If verification fails, return 401.

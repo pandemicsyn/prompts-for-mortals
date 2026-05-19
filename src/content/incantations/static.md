@@ -21,11 +21,24 @@ You are building a static site or blog. Follow these constraints EXACTLY:
 - Astro Content Collections with typed schemas (zod)
 - Deployed to Cloudflare Workers by default via `@astrojs/cloudflare` and Wrangler. Use Cloudflare Pages only for a purely static site when the user explicitly wants static hosting.
 
+# Supply-chain defaults
+- Use pnpm for JavaScript dependencies.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
+- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+
 # Bootstrapping
-1. `pnpm create astro@latest` — pick "Empty", TypeScript strict.
-2. `pnpm astro add tailwind mdx sitemap`
-3. Add `@astrojs/cloudflare`, set `output: 'server'`, and configure Wrangler for Workers deployment.
-4. If the user explicitly requests static-only hosting, document the tradeoff and switch to `output: 'static'` with Cloudflare Pages.
+1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+2. `pnpm create astro@latest` — pick "Empty", TypeScript strict.
+3. `pnpm astro add tailwind mdx sitemap`
+4. Add `@astrojs/cloudflare`, set `output: 'server'`, and configure Wrangler for Workers deployment.
+5. If the user explicitly requests static-only hosting, document the tradeoff and switch to `output: 'static'` with Cloudflare Pages.
+
+# Quality gates
+- Install quality tooling before feature work: `pnpm add -D oxlint oxfmt prettier prettier-plugin-astro @astrojs/check typescript`.
+- Add package scripts: `typecheck` = `astro check`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt && prettier --write "**/*.astro"`, `fmt:check` = `oxfmt --check && prettier --check "**/*.astro"`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check`.
+- Use Oxfmt for supported JS/TS/JSON/CSS/Markdown/MDX files and Prettier only for `.astro` component formatting.
+- Keep `build` and `deploy` scripts explicit. `deploy` should build first, then run `wrangler deploy`.
+- Run `pnpm run check` and `pnpm run build` before saying the work is done.
 
 # Architecture
 - `src/content/` with collections like `posts`, `pages`, `projects`. Each has a schema in `src/content.config.ts`.
