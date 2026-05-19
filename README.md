@@ -11,6 +11,18 @@ pnpm run dev
 
 The local site runs at `http://localhost:4321/`.
 
+## Prompt Content
+
+Incantations are Astro Content Collection entries, one prompt per Markdown file:
+
+```text
+src/content/incantations/static.md
+src/content/incantations/web.md
+src/content/incantations/api.md
+```
+
+Add or edit prompts by changing those files. Frontmatter is validated in `src/content.config.ts`; the Markdown body becomes the copyable prompt text.
+
 ## Checks
 
 ```sh

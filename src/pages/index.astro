@@ -1,10 +1,13 @@
 ---
+import { getCollection } from "astro:content";
 import PromptGrimoire from "../components/PromptGrimoire.jsx";
 import "../styles/global.css";
 
 const title = "Prompts for Mere Mortals";
 const description =
   "A curated library of opinionated AI coding prompts for Claude, Codex, and other coding assistants. Pick a stack, copy a prompt, and start with stronger defaults.";
+const incantations: Array<Record<string, unknown>> = (await getCollection("incantations"))
+  .map(({ body, data }) => ({ ...data, prompt: (body ?? "").trim() }));
 ---
 
 <!doctype html>
@@ -23,6 +26,6 @@ const description =
     <title>{title}</title>
   </head>
   <body>
-    <PromptGrimoire client:load />
+    <PromptGrimoire incantations={incantations} client:load />
   </body>
 </html>

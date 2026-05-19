@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { INCANTATIONS } from "../data/incantations";
 
 // ─── Iconography (simple, geometric — no fancy hand-drawn SVG) ──────────────
 
@@ -482,14 +481,17 @@ function Footer({ onReturn }) {
 
 // ─── App ───────────────────────────────────────────────────────────────────
 
-export default function PromptGrimoire() {
+/**
+ * @param {{ incantations?: Array<Record<string, any>> }} props
+ */
+export default function PromptGrimoire({ incantations = [] }) {
   const [rarity, setRarity] = useState("all");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [copyFailedId, setCopyFailedId] = useState(null);
 
-  const starter = useMemo(() => INCANTATIONS.find(s => s.id === "static"), []);
+  const starter = useMemo(() => incantations.find(s => s.id === "static"), [incantations]);
 
   const handleCopy = async (spell) => {
     const ok = await copyPrompt(spell.prompt);
@@ -502,7 +504,7 @@ export default function PromptGrimoire() {
   };
 
   const filtered = useMemo(() => {
-    let arr = INCANTATIONS;
+    let arr = incantations;
     if (rarity !== "all") arr = arr.filter(s => s.rarity === rarity);
     const q = query.trim().toLowerCase();
     if (q) {
@@ -518,7 +520,7 @@ export default function PromptGrimoire() {
     return arr.slice().sort((a,b) =>
       RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity) || a.difficulty - b.difficulty
     );
-  }, [rarity, query]);
+  }, [incantations, rarity, query]);
 
   return (
     <div className="night-sky min-h-screen">
@@ -542,7 +544,7 @@ export default function PromptGrimoire() {
       <main id="tome" className="pb-20">
         {starter && (
           <CatalogIntro
-            totalCount={INCANTATIONS.length}
+            totalCount={incantations.length}
             onOpenStarter={() => setOpen(starter)}
             onCopyStarter={() => handleCopy(starter)}
             copiedStarter={copiedId === starter.id}
