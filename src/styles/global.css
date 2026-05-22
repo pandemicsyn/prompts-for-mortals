@@ -200,29 +200,13 @@ html, body {
 
 .spell-card-feature {
   grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(180px, 0.92fr) minmax(0, 1.35fr);
-  column-gap: clamp(1.2rem, 2vw, 2rem);
-  align-content: start;
-}
-
-.spell-card-feature.rarity-legendary {
-  grid-template-columns: minmax(220px, 0.78fr) minmax(0, 1.62fr);
-}
-
-.spell-card-feature > .card-mark-row {
-  grid-row: span 4;
-  display: grid;
-  align-content: space-between;
-  min-height: 100%;
-  margin-bottom: 0;
-  padding-right: clamp(0.35rem, 1vw, 0.9rem);
-  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
 }
 
 .spell-card-feature .glyph-disc {
-  width: clamp(64px, 8vw, 92px);
-  height: clamp(64px, 8vw, 92px);
+  width: clamp(64px, 7vw, 82px);
+  height: clamp(64px, 7vw, 82px);
 }
 
 .spell-card-feature h3 {
@@ -232,6 +216,10 @@ html, body {
 
 .spell-card-feature .card-summary {
   max-width: 42ch;
+}
+
+.spell-card-feature .card-actions {
+  justify-content: flex-start;
 }
 
 .spell-card-folio {
@@ -590,23 +578,10 @@ nav a:focus-visible {
 
   .spell-card,
   .spell-card-feature,
-  .spell-card-feature.rarity-legendary,
   .spell-card-folio,
   .spell-card-chapter,
   .spell-card-leaf {
     grid-column: 1 / -1;
-  }
-
-  .spell-card-feature {
-    display: flex;
-  }
-
-  .spell-card-feature > .card-mark-row {
-    display: flex;
-    min-height: auto;
-    margin-bottom: 1rem;
-    padding-right: 0;
-    border-right: 0;
   }
 
   .spell-card-feature .glyph-disc,
