@@ -188,8 +188,9 @@ function FilterBar({ rarity, setRarity, query, setQuery, resultCount }) {
   );
 }
 
-function SpellCard({ spell, onOpen, loading }) {
+function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loadingAction }) {
   const titleId = `spell-title-${spell.id}`;
+  const isLoading = Boolean(loadingAction);
 
   return (
     <article
@@ -235,16 +236,27 @@ function SpellCard({ spell, onOpen, loading }) {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => onOpen(spell)}
-        className="cta-row card-action"
-        aria-labelledby={titleId}
-        disabled={loading}
-      >
-        <span>{loading ? "Loading scroll" : "Reveal Incantation"}</span>
-        <span className="arrow" aria-hidden="true">→</span>
-      </button>
+      <div className="card-actions">
+        <button
+          type="button"
+          onClick={() => onCopy(spell)}
+          className={`btn-fat compact card-copy ${copied ? "lime" : ""}`}
+          aria-label={`Copy prompt for ${spell.title}`}
+          disabled={isLoading}
+        >
+          {loadingAction === "copy" ? "Loading" : copyFailed ? "Copy Failed" : copied ? "Copied" : "Copy Prompt"}
+        </button>
+        <button
+          type="button"
+          onClick={() => onOpen(spell)}
+          className="btn-pill compact card-detail"
+          aria-label={`View details for ${spell.title}`}
+          disabled={isLoading}
+        >
+          <span>{loadingAction === "open" ? "Loading" : "Details"}</span>
+          <span className="arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
     </article>
   );
 }
@@ -432,7 +444,10 @@ export default function PromptGrimoire({ incantations = [] }) {
   const [rarity, setRarity] = useState("all");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+  const [copyFailedId, setCopyFailedId] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
+  const [loadingAction, setLoadingAction] = useState(null);
   const [catalogStatus, setCatalogStatus] = useState("");
   const [theme, setTheme] = useState(getInitialTheme);
   const promptCache = useRef(new Map());
@@ -461,15 +476,50 @@ export default function PromptGrimoire({ incantations = [] }) {
 
   const handleOpen = async (spell) => {
     setLoadingId(spell.id);
+    setLoadingAction("open");
+    setCopyFailedId(null);
     setCatalogStatus(`Loading ${spell.title} prompt.`);
     try {
       setOpen(await loadPrompt(spell));
       setCatalogStatus("");
     } catch {
+      setCopyFailedId(spell.id);
       setCatalogStatus(`Could not load ${spell.title} prompt. Try again.`);
-      window.setTimeout(() => setCatalogStatus(""), 2600);
+      window.setTimeout(() => {
+        setCopyFailedId(null);
+        setCatalogStatus("");
+      }, 2600);
     } finally {
       setLoadingId(null);
+      setLoadingAction(null);
+    }
+  };
+
+  const handleCopy = async (spell) => {
+    setLoadingId(spell.id);
+    setLoadingAction("copy");
+    try {
+      const fullSpell = await loadPrompt(spell);
+      const ok = await copyPrompt(fullSpell.prompt);
+      setCopiedId(ok ? spell.id : null);
+      setCopyFailedId(ok ? null : spell.id);
+      setCatalogStatus(ok ? `Copied ${spell.title} prompt.` : `Could not copy ${spell.title} prompt. Open details and copy it manually.`);
+      window.setTimeout(() => {
+        setCopiedId(null);
+        setCopyFailedId(null);
+        setCatalogStatus("");
+      }, 1800);
+    } catch {
+      setCopiedId(null);
+      setCopyFailedId(spell.id);
+      setCatalogStatus(`Could not load ${spell.title} prompt. Try again.`);
+      window.setTimeout(() => {
+        setCopyFailedId(null);
+        setCatalogStatus("");
+      }, 2600);
+    } finally {
+      setLoadingId(null);
+      setLoadingAction(null);
     }
   };
 
@@ -529,7 +579,10 @@ export default function PromptGrimoire({ incantations = [] }) {
                 key={spell.id}
                 spell={spell}
                 onOpen={handleOpen}
-                loading={loadingId === spell.id}
+                onCopy={handleCopy}
+                copied={copiedId === spell.id}
+                copyFailed={copyFailedId === spell.id}
+                loadingAction={loadingId === spell.id ? loadingAction : null}
               />
             ))}
           </div>

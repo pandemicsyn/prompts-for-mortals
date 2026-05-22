@@ -288,6 +288,13 @@ body {
 
 .btn-fat.lime { background: var(--lime); }
 
+.btn-fat.compact,
+.btn-pill.compact {
+  min-height: 42px;
+  font-size: 0.82rem;
+  padding: 0.48rem 0.9rem;
+}
+
 .btn-pill {
   min-height: 42px;
   border-width: 2px;
@@ -310,11 +317,21 @@ body {
   color: var(--gold);
 }
 
+.btn-fat:disabled,
+.btn-pill:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.btn-fat:disabled:hover,
+.btn-pill:disabled:hover {
+  transform: none;
+}
+
 .btn-fat:focus-visible,
 .btn-pill:focus-visible,
 .search-input:focus-visible,
 .search-clear:focus-visible,
-.card-action:focus-visible,
 .x-btn:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 4px;
@@ -554,51 +571,41 @@ body {
   color: var(--cream);
 }
 
-.cta-row {
+.card-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   border-top: var(--outline-w) solid var(--outline);
-  border-right: 0;
-  border-bottom: 0;
-  border-left: 0;
   background: var(--ink);
-  color: var(--cream);
-  cursor: pointer;
-  font-family: "Nunito", system-ui, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 900;
-  letter-spacing: 0.02em;
+  gap: 0.75rem;
   margin-top: auto;
-  padding: 0.75rem 1.1rem;
-  text-align: left;
+  padding: 0.9rem 1.1rem;
 }
 
-.cta-row .arrow {
+.card-copy {
+  flex: 1 1 auto;
+}
+
+.card-detail {
+  flex: 0 0 auto;
+  background: var(--cream);
+}
+
+.card-detail .arrow {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border: 2px solid var(--cream);
   border-radius: 50%;
   background: var(--gold);
   color: var(--ink);
-  font-size: 1.1rem;
+  font-size: 1rem;
   transition: transform 200ms ease;
 }
 
-.spell-card:hover .cta-row .arrow {
+.spell-card:hover .card-detail .arrow {
   transform: translateX(4px) rotate(10deg);
-}
-
-.card-action:disabled {
-  cursor: wait;
-  opacity: 0.82;
-}
-
-.card-action:active {
-  background: var(--ink-soft);
 }
 
 .scrim {
