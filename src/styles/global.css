@@ -210,7 +210,7 @@ html, body {
   grid-template-columns: minmax(220px, 0.78fr) minmax(0, 1.62fr);
 }
 
-.spell-card-feature > .flex:first-child {
+.spell-card-feature > .card-mark-row {
   grid-row: span 4;
   display: grid;
   align-content: space-between;
@@ -260,27 +260,6 @@ html, body {
   border-radius: 2px;
   padding: 0.28rem 0.44rem;
 }
-
-/* Rarity pill */
-.rarity-pill {
-  font-family: "Cinzel", serif;
-  font-size: 0.7rem;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  padding: 0.15rem 0.6rem;
-  border: 1px solid var(--r);
-  color: var(--r);
-  background: color-mix(in oklch, var(--r) 12%, transparent);
-  border-radius: 2px;
-}
-
-/* Stat dot */
-.stat-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--gilded);
-  box-shadow: 0 0 6px color-mix(in oklch, var(--gilded) 60%, transparent);
-}
-.stat-dot.dim { background: var(--stat-empty); box-shadow: none; }
 
 /* School glyph circle */
 .glyph-disc {
@@ -444,6 +423,11 @@ nav a:focus-visible {
 .catalog-intro > div:first-child {
   border-top: 1px solid var(--line);
   padding-top: 1.25rem;
+}
+
+.catalog-guidance {
+  margin-top: 0.9rem;
+  max-width: 58ch;
 }
 
 .starter-panel {
@@ -617,7 +601,7 @@ nav a:focus-visible {
     display: flex;
   }
 
-  .spell-card-feature > .flex:first-child {
+  .spell-card-feature > .card-mark-row {
     display: flex;
     min-height: auto;
     margin-bottom: 1rem;
@@ -662,7 +646,6 @@ nav a:focus-visible {
     padding-inline: 1rem;
   }
 
-  .rarity-pill,
   .starter-label {
     font-size: 0.875rem;
     line-height: 1.1;

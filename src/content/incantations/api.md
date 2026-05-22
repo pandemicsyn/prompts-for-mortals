@@ -9,7 +9,7 @@ castTime: "30–60 min"
 icon: "api"
 reagents: ["Cloudflare account", "A database"]
 effect: "A typed, validated, rate-limited HTTP API deployed worldwide on the edge for free."
-stack: ["Hono", "Cloudflare Workers", "Drizzle", "D1 or Neon", "Zod"]
+stack: ["Hono", "Cloudflare Workers", "Drizzle", "D1 or PlanetScale", "Zod"]
 summary: "Hono is what Express wishes it were. Tiny, fast, and you can run it on Workers, Bun, Node, or Deno without changes."
 ---
 You are building an HTTP API. Follow these constraints EXACTLY:
@@ -18,7 +18,7 @@ You are building an HTTP API. Follow these constraints EXACTLY:
 - Hono as the framework (works on Workers, Bun, Node — pick Workers unless told otherwise)
 - Cloudflare Workers + Wrangler for deploy
 - Drizzle ORM
-- Database: Cloudflare D1 for low-volume, Neon Postgres for anything serious
+- Database: Cloudflare D1 by default; PlanetScale for production relational workloads. Do not use Neon.
 - Zod for ALL input validation via `@hono/zod-validator`
 - TypeScript, strict
 - pnpm
@@ -32,8 +32,9 @@ You are building an HTTP API. Follow these constraints EXACTLY:
 1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
 2. `pnpm create cloudflare@latest -- --type=hello-world --ts`
 3. `pnpm add hono @hono/zod-validator zod drizzle-orm`
-4. For D1: `wrangler d1 create <name>`, paste binding into wrangler.toml.
-5. Drizzle config: `drizzle.config.ts` pointed at `src/db/schema.ts`.
+4. For D1: `wrangler d1 create <name>`, paste binding into Wrangler config.
+5. For PlanetScale: `pnpm add @planetscale/database` and use Drizzle's PlanetScale serverless driver.
+6. Drizzle config: `drizzle.config.ts` pointed at `src/db/schema.ts`.
 
 # Quality gates
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript @cloudflare/vitest-pool-workers`.

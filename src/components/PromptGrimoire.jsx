@@ -182,26 +182,20 @@ function FilterBar({ rarity, setRarity, query, setQuery, resultCount }) {
 function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loading }) {
   const isStarter = spell.id === "static";
   const layout = getCardLayout(spell);
-  const difficultyLabel = `Difficulty ${spell.difficulty} out of 5`;
-  const castTimeLabel = `Estimated time ${spell.castTime}`;
   const stackLabel = `Stack: ${spell.stack.join(", ")}`;
 
   return (
     <article
       className={`spell-card spell-card-${layout} rarity-${spell.rarity} ${isStarter ? "starter-card" : ""} p-6 rounded-md flex flex-col w-full`}
       aria-labelledby={`spell-title-${spell.id}`}
-      aria-describedby={`spell-meta-${spell.id} spell-summary-${spell.id}`}
+      aria-describedby={`spell-summary-${spell.id}`}
     >
-      {/* Top row: glyph + rarity */}
-      <div className="flex items-start justify-between gap-3 mb-4">
+      {/* Top row: glyph + optional starter label */}
+      <div className="card-mark-row flex items-start justify-between gap-3 mb-4">
         <div className="glyph-disc text-amber-50">
           <SchoolIcon kind={spell.icon} />
         </div>
-        <div className="flex flex-col items-end gap-2">
-          {isStarter && <span className="starter-label">Best first cast</span>}
-          <span className="rarity-pill">{RARITY_LABEL[spell.rarity]}</span>
-          <span className="caption-mono">{spell.school}</span>
-        </div>
+        {isStarter && <span className="starter-label">Best first cast</span>}
       </div>
 
       {/* Title */}
@@ -212,23 +206,6 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loading }) {
         {spell.subtitle}
       </p>
 
-      {/* Stats */}
-      <div id={`spell-meta-${spell.id}`} className="flex items-center gap-5 mb-5 text-xs">
-        <div className="flex items-center gap-1.5">
-          <span className="caption-mono text-amber-200/70" aria-hidden="true">DIFFICULTY</span>
-          <span className="sr-only">{difficultyLabel}</span>
-          <span className="flex gap-1 ml-1" aria-hidden="true">
-            {[0,1,2,3,4].map(i => (
-              <span key={i} className={`stat-dot ${i < spell.difficulty ? "" : "dim"}`} />
-            ))}
-          </span>
-        </div>
-        <div className="caption-mono text-amber-200/70">
-          <span aria-hidden="true">⌛ {spell.castTime}</span>
-          <span className="sr-only">{castTimeLabel}</span>
-        </div>
-      </div>
-
       {/* Summary */}
       <p id={`spell-summary-${spell.id}`} className="card-summary font-body text-amber-50/85 leading-relaxed text-[0.95rem] mb-5 flex-1">
         {spell.summary}
@@ -237,11 +214,11 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loading }) {
       {/* Stack tags */}
       <div className="flex flex-wrap gap-1.5 mb-5" aria-label={stackLabel}>
         <span className="sr-only">{stackLabel}</span>
-        {spell.stack.slice(0, 4).map(s => (
+        {spell.stack.slice(0, 3).map(s => (
           <span key={s} className="tag-mono" aria-hidden="true">{s}</span>
         ))}
-        {spell.stack.length > 4 && (
-          <span className="tag-mono" aria-hidden="true">+{spell.stack.length - 4}</span>
+        {spell.stack.length > 3 && (
+          <span className="tag-mono" aria-hidden="true">+{spell.stack.length - 3}</span>
         )}
       </div>
 
@@ -251,7 +228,7 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loading }) {
           {loading ? "Loading" : copyFailed ? "Copy failed" : copied ? "Copied" : "Copy prompt"}
         </button>
         <button type="button" className="btn-ghost compact" onClick={() => onOpen(spell)} aria-label={`View details for ${spell.title}`} disabled={loading}>
-          {loading ? "Loading" : "View details"}
+          {loading ? "Loading" : "Details"}
         </button>
       </div>
     </article>
@@ -437,6 +414,9 @@ function CatalogIntro({ totalCount, onOpenStarter, onCopyStarter, copiedStarter,
         <p className="font-body text-amber-50/75 text-lg leading-relaxed">
           The collection is organized by outcome. If you are new here, start with the Astro site prompt, then branch into apps, APIs, bots, and extensions.
         </p>
+        <p className="catalog-guidance font-body text-amber-100/70 leading-relaxed">
+          Replace the bracketed request, run the prompt, then review the diff before you ship.
+        </p>
       </div>
       <div className="starter-panel rarity-common">
         <span className="caption-mono">Recommended first prompt</span>
@@ -491,6 +471,7 @@ export default function PromptGrimoire({ incantations = [] }) {
   const [copiedId, setCopiedId] = useState(null);
   const [copyFailedId, setCopyFailedId] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
+  const [catalogStatus, setCatalogStatus] = useState("");
   const promptCache = useRef(new Map());
 
   const starter = useMemo(() => incantations.find(s => s.id === "static"), [incantations]);
@@ -527,13 +508,20 @@ export default function PromptGrimoire({ incantations = [] }) {
       const ok = await copyPrompt(fullSpell.prompt);
       setCopiedId(ok ? spell.id : null);
       setCopyFailedId(ok ? null : spell.id);
+      setCatalogStatus(ok ? `Copied ${spell.title} prompt.` : `Could not copy ${spell.title} prompt. Open details and copy it manually.`);
       setTimeout(() => {
         setCopiedId(null);
         setCopyFailedId(null);
+        setCatalogStatus("");
       }, 1800);
     } catch {
       setCopiedId(null);
       setCopyFailedId(spell.id);
+      setCatalogStatus(`Could not load ${spell.title} prompt. Try again.`);
+      setTimeout(() => {
+        setCopyFailedId(null);
+        setCatalogStatus("");
+      }, 2600);
     } finally {
       setLoadingId(null);
     }
@@ -579,6 +567,8 @@ export default function PromptGrimoire({ incantations = [] }) {
       <Hero />
 
       <main id="tome" className="pb-20">
+        <p className="sr-only" aria-live="polite" aria-atomic="true">{catalogStatus}</p>
+
         {starter && (
           <CatalogIntro
             totalCount={incantations.length}
