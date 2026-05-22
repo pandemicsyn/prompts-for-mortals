@@ -442,11 +442,16 @@ body {
 .card-band {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.9rem;
   border-bottom: var(--outline-w) solid var(--outline);
   background: var(--r);
   padding: 0.85rem 1.1rem 0.75rem;
+}
+
+.card-title {
+  color: var(--ink);
+  overflow-wrap: break-word;
 }
 
 .glyph-badge {

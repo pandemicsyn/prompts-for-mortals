@@ -201,7 +201,7 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loadingAction })
           <SchoolIcon kind={spell.icon} />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 id={titleId} className="font-display truncate text-[1.35rem] leading-[1.05] md:text-[1.55rem]">
+          <h3 id={titleId} className="font-display card-title text-[1.35rem] leading-[1.05] md:text-[1.55rem]">
             {spell.title}
           </h3>
           <div className="card-school font-body mt-1 text-sm leading-tight">
