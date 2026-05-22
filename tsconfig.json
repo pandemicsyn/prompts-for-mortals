@@ -4,5 +4,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "Prompts For Mere Mortals-2"]
 }

@@ -1,82 +1,91 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-// ─── Iconography (simple, geometric — no fancy hand-drawn SVG) ──────────────
-
 function SchoolIcon({ kind, className = "w-7 h-7" }) {
-  const stroke = "currentColor";
-  const props = { className, viewBox: "0 0 24 24", fill: "none", stroke, strokeWidth: 1.4, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": "true", focusable: "false" };
+  const props = {
+    className,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2.4,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+    focusable: "false",
+  };
   switch (kind) {
     case "desktop":
-      return (
-        <svg {...props}>
-          <rect x="3" y="4" width="18" height="12" rx="1" />
-          <path d="M8 20h8M12 16v4" />
-        </svg>
-      );
+      return <svg {...props}><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>;
     case "mobile":
-      return (
-        <svg {...props}>
-          <rect x="7" y="2.5" width="10" height="19" rx="2" />
-          <path d="M11 18.5h2" />
-        </svg>
-      );
+      return <svg {...props}><rect x="7" y="2.5" width="10" height="19" rx="2.5" /><path d="M11 18.5h2" /></svg>;
     case "web":
-      return (
-        <svg {...props}>
-          <circle cx="12" cy="12" r="9" />
-          <path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" />
-        </svg>
-      );
+      return <svg {...props}><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" /></svg>;
     case "cli":
-      return (
-        <svg {...props}>
-          <rect x="3" y="4" width="18" height="16" rx="1.5" />
-          <path d="M7 10l3 2-3 2M12 14h5" />
-        </svg>
-      );
+      return <svg {...props}><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 10l3 2-3 2M12 14h5" /></svg>;
     case "extension":
-      return (
-        <svg {...props}>
-          <path d="M9 4h6v3a2 2 0 104 0V10h3v6h-3a2 2 0 100 4v3H4v-3a2 2 0 100-4H4v-6h3a2 2 0 102-4V4z" />
-        </svg>
-      );
+      return <svg {...props}><path d="M9 4h6v3a2 2 0 104 0V10h3v6h-3a2 2 0 100 4v3H4v-3a2 2 0 100-4H4v-6h3a2 2 0 102-4V4z" /></svg>;
     case "bot":
-      return (
-        <svg {...props}>
-          <rect x="4" y="7" width="16" height="11" rx="3" />
-          <path d="M12 7V4M8 12h.01M16 12h.01M9 16h6" />
-        </svg>
-      );
+      return <svg {...props}><rect x="4" y="7" width="16" height="11" rx="3" /><path d="M12 7V4M8 12h.01M16 12h.01M9 16h6" /></svg>;
     case "static":
-      return (
-        <svg {...props}>
-          <path d="M5 3h11l4 4v14H5z" />
-          <path d="M16 3v4h4M8 12h8M8 16h8M8 8h3" />
-        </svg>
-      );
+      return <svg {...props}><path d="M5 3h11l4 4v14H5z" /><path d="M16 3v4h4M8 12h8M8 16h8M8 8h3" /></svg>;
     case "api":
-      return (
-        <svg {...props}>
-          <path d="M4 8c4-3 12-3 16 0M4 16c4 3 12 3 16 0" />
-          <circle cx="12" cy="12" r="2" />
-          <path d="M12 4v16" />
-        </svg>
-      );
+      return <svg {...props}><path d="M4 8c4-3 12-3 16 0M4 16c4 3 12 3 16 0" /><circle cx="12" cy="12" r="2" /><path d="M12 4v16" /></svg>;
     default:
       return <svg {...props}><circle cx="12" cy="12" r="6" /></svg>;
   }
 }
 
-// ─── Rarity helpers ────────────────────────────────────────────────────────
+function Sparkle({ size = 32, className = "", style }) {
+  return (
+    <svg viewBox="0 0 32 32" width={size} height={size} className={className} style={style} aria-hidden="true" focusable="false">
+      <path d="M16 2c1 5 3 7 8 8-5 1-7 3-8 8-1-5-3-7-8-8 5-1 7-3 8-8z" />
+    </svg>
+  );
+}
+
+function Star({ size = 28, className = "", style }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} style={style} aria-hidden="true" focusable="false">
+      <path d="M12 2l2.9 6.5 7.1.7-5.4 4.9 1.6 7L12 17.6 5.8 21.1l1.6-7L2 9.2l7.1-.7L12 2z" />
+    </svg>
+  );
+}
+
+function Moon({ size = 36, className = "", style }) {
+  return (
+    <svg viewBox="0 0 40 40" width={size} height={size} className={className} style={style} aria-hidden="true" focusable="false">
+      <path d="M27 4c-9 0-16 7-16 16s7 16 16 16c4 0 8-1.5 11-4-7 0-13-5-13-13S20 6 27 6z" />
+    </svg>
+  );
+}
+
+function Sun({ size = 22, className = "", style }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} style={style} aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4.5" />
+      <path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" />
+    </svg>
+  );
+}
+
+function ToggleMoon({ size = 22, className = "", style }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} style={style} aria-hidden="true" focusable="false">
+      <path d="M20 13.5A8 8 0 1 1 10.5 4a6.5 6.5 0 0 0 9.5 9.5z" />
+    </svg>
+  );
+}
 
 const RARITY_ORDER = ["common", "rare", "epic", "legendary"];
 const RARITY_LABEL = { common: "Common", rare: "Rare", epic: "Epic", legendary: "Legendary" };
 
-function getCardLayout(spell) {
-  if (spell.id === "static" || spell.id === "web") return "feature";
-  if (spell.rarity === "legendary") return "folio";
-  if (spell.rarity === "epic") return "chapter";
-  return "leaf";
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem("pfm-theme");
+    if (saved === "dark" || saved === "light") return saved;
+  } catch {
+    // Ignore storage restrictions.
+  }
+  return "dark";
 }
 
 async function copyPrompt(prompt) {
@@ -99,72 +108,74 @@ async function copyPrompt(prompt) {
   }
 }
 
-// ─── Hero ──────────────────────────────────────────────────────────────────
-
-function Hero() {
+function Hero({ theme }) {
   return (
-    <header className="relative pt-16 pb-10 md:pt-24 md:pb-14 text-center px-6">
-      <div className="caption-mono mb-5">A Grimoire · Vol. I · 2026</div>
+    <header className="relative px-6 pb-12 pt-12 text-center md:pb-16 md:pt-16">
+      <Sparkle className="sparkle-deco sparkle-gold bob hidden md:block" size={42} style={{ top: "8%", left: "8%", "--rot": "-12deg" }} />
+      <Star className="sparkle-deco sparkle-pink bob hidden md:block" size={36} style={{ top: "20%", right: "12%", "--rot": "18deg", animationDelay: "1s" }} />
+      <Sparkle className="sparkle-deco sparkle-lime bob hidden md:block" size={28} style={{ top: "45%", left: "5%", "--rot": "20deg", animationDelay: "2s" }} />
+      {theme === "light" ? (
+        <Sun className="sparkle-deco sparkle-sun bob hidden md:block" size={64} style={{ top: "10%", right: "6%", "--rot": "0deg", animationDelay: "0.5s" }} />
+      ) : (
+        <Moon className="sparkle-deco sparkle-moon bob hidden md:block" size={56} style={{ top: "12%", right: "6%", "--rot": "-15deg", animationDelay: "0.5s" }} />
+      )}
+      <Star className="sparkle-deco sparkle-cyan bob hidden md:block" size={26} style={{ top: "60%", right: "8%", "--rot": "-22deg", animationDelay: "1.5s" }} />
+      <Sparkle className="sparkle-deco sparkle-plum bob hidden md:block" size={34} style={{ top: "70%", left: "10%", "--rot": "8deg", animationDelay: "0.8s" }} />
 
-      <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95]" aria-label="Prompts for Mere Mortals">
-        <span className="gilded">Prompts</span>
-        <span className="block text-[0.55em] md:text-[0.5em] mt-3 mb-3 text-amber-100/60">FOR · MERE</span>
-        <span className="gilded">Mortals</span>
+      <div className="caption relative z-10 mb-6">A Friendly Grimoire, Vol. I</div>
+
+      <h1 className="wordmark relative z-10" aria-label="Prompts for Mere Mortals">
+        <span className="lo block text-[16vw] md:text-[10rem] lg:text-[12rem]">Prompts</span>
+        <span className="my-3 block md:my-4">
+          <span className="tag-script text-sm md:text-lg">For Mere</span>
+        </span>
+        <span className="lo2 block text-[16vw] md:text-[10rem] lg:text-[12rem]">Mortals</span>
       </h1>
 
-      <div className="divider max-w-md mx-auto mt-10">
-        <span className="glyph">✦ ✦ ✦</span>
-      </div>
-
-      <p className="font-body italic text-amber-50/80 text-lg md:text-xl max-w-2xl mx-auto mt-8 leading-relaxed">
-        A small collection of curated prompts, faithfully transcribed for use with{" "}
-        <span className="text-amber-200 not-italic font-semibold">Claude</span>,{" "}
-        <span className="text-amber-200 not-italic font-semibold">Codex</span>, and other arcane familiars.
-        Pick a school, copy the prompt, and start with stronger defaults.
+      <p className="font-body relative z-10 mx-auto mt-10 max-w-2xl text-lg leading-relaxed md:text-xl">
+        A pocket-sized collection of <strong className="text-gold">battle-tested prompts</strong> for{" "}
+        <strong className="text-pink">Claude</strong>, <strong className="text-mint">Codex</strong>, and friends.
+        Pick a school. Copy the scroll. Watch a real app appear.
       </p>
 
-      <div className="mt-10 flex items-center justify-center gap-3 text-xs caption-mono">
-        <span>Browse the prompt library</span>
+      <div className="relative z-10 mt-8 flex items-center justify-center gap-3">
+        <a href="#tome" className="btn-fat">Open the Tome</a>
       </div>
     </header>
   );
 }
 
-// ─── Filter bar ────────────────────────────────────────────────────────────
-
 function FilterBar({ rarity, setRarity, query, setQuery, resultCount }) {
   return (
-    <div className="max-w-6xl mx-auto px-6 mb-10">
-      <div className="catalog-toolbar flex flex-col md:flex-row md:items-end gap-4 justify-between">
-        <div className="flex flex-wrap gap-2">
-          <button
-            className={`filter-pill ${rarity === "all" ? "active" : ""}`}
-            onClick={() => setRarity("all")}
-            aria-pressed={rarity === "all"}
-          >
+    <div className="mx-auto mb-10 max-w-6xl px-6">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div className="flex flex-wrap gap-3" aria-label="Filter prompts by rarity">
+          <button className={`btn-pill ${rarity === "all" ? "active" : ""}`} type="button" onClick={() => setRarity("all")} aria-pressed={rarity === "all"}>
             All Spells
           </button>
           {RARITY_ORDER.map(r => (
             <button
               key={r}
-              className={`filter-pill rarity-${r} ${rarity === r ? "active" : ""}`}
+              className={`btn-pill ${rarity === r ? "active" : ""}`}
+              type="button"
               onClick={() => setRarity(r)}
               aria-pressed={rarity === r}
             >
+              <span className={`rarity-dot rarity-dot-${r}`} aria-hidden="true" />
               {RARITY_LABEL[r]}
             </button>
           ))}
         </div>
 
-        <label className="search-field">
-          <span className="caption-mono">Search {resultCount} prompts</span>
+        <label className="search-wrap">
+          <span className="sr-only">Search {resultCount} prompts</span>
           <input
+            className="search-input w-full md:w-80"
             type="search"
             aria-label="Search prompts"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Try mobile, API, Tauri..."
-            className="font-body text-amber-50 placeholder-amber-100/35 bg-transparent border border-amber-200/20 hover:border-amber-200/40 focus:border-amber-200/70 outline-none px-4 py-3 rounded-sm w-full md:w-80 transition-colors"
+            placeholder="Search the tome..."
           />
           {query && (
             <button className="search-clear" type="button" onClick={() => setQuery("")} aria-label="Clear search">
@@ -177,65 +188,66 @@ function FilterBar({ rarity, setRarity, query, setQuery, resultCount }) {
   );
 }
 
-// ─── Spell card ────────────────────────────────────────────────────────────
-
-function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loading }) {
-  const isStarter = spell.id === "static";
-  const layout = getCardLayout(spell);
-  const stackLabel = `Stack: ${spell.stack.join(", ")}`;
+function SpellCard({ spell, onOpen, loading }) {
+  const titleId = `spell-title-${spell.id}`;
 
   return (
     <article
-      className={`spell-card spell-card-${layout} rarity-${spell.rarity} ${isStarter ? "starter-card" : ""} p-6 rounded-md flex flex-col w-full`}
-      aria-labelledby={`spell-title-${spell.id}`}
-      aria-describedby={`spell-summary-${spell.id}`}
+      className={`spell-card rarity-${spell.rarity}`}
     >
-      {/* Top row: glyph + optional starter label */}
-      <div className="card-mark-row flex items-start justify-between gap-3 mb-4">
-        <div className="glyph-disc text-amber-50">
+      <div className="card-band">
+        <div className="glyph-badge">
           <SchoolIcon kind={spell.icon} />
         </div>
-        {isStarter && <span className="starter-label">Best first cast</span>}
+        <div className="min-w-0 flex-1">
+          <h3 id={titleId} className="font-display truncate text-[1.35rem] leading-[1.05] md:text-[1.55rem]">
+            {spell.title}
+          </h3>
+          <div className="card-school font-body mt-1 text-sm leading-tight">
+            {spell.school}
+          </div>
+        </div>
+        <div className="rarity-sticker"><span className="dot" aria-hidden="true" />{RARITY_LABEL[spell.rarity]}</div>
       </div>
 
-      {/* Title */}
-      <h3 id={`spell-title-${spell.id}`} className="font-display text-2xl md:text-[1.7rem] leading-tight text-amber-50 mb-1">
-        {spell.title}
-      </h3>
-      <p className="font-body italic text-amber-100/70 text-sm md:text-base mb-5">
-        {spell.subtitle}
-      </p>
+      <div className="flex flex-col gap-3.5 p-5 pb-4">
+        <p className="font-body card-subtitle leading-snug">{spell.subtitle}</p>
 
-      {/* Summary */}
-      <p id={`spell-summary-${spell.id}`} className="card-summary font-body text-amber-50/85 leading-relaxed text-[0.95rem] mb-5 flex-1">
-        {spell.summary}
-      </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2" aria-label={`Difficulty ${spell.difficulty} out of 5`}>
+            <span className="stat-label">Diff</span>
+            <span className="diff-dots" aria-hidden="true">
+              {[0, 1, 2, 3, 4].map(i => (
+                <span key={i} className={`d ${i < spell.difficulty ? "on" : ""}`} />
+              ))}
+            </span>
+          </div>
+          <div className="timepill"><span aria-hidden="true">Time</span>{spell.castTime}</div>
+        </div>
 
-      {/* Stack tags */}
-      <div className="flex flex-wrap gap-1.5 mb-5" aria-label={stackLabel}>
-        <span className="sr-only">{stackLabel}</span>
-        {spell.stack.slice(0, 3).map(s => (
-          <span key={s} className="tag-mono" aria-hidden="true">{s}</span>
-        ))}
-        {spell.stack.length > 3 && (
-          <span className="tag-mono" aria-hidden="true">+{spell.stack.length - 3}</span>
-        )}
+        <p className="font-body card-summary text-[0.97rem] leading-relaxed">{spell.summary}</p>
+
+        <div className="flex flex-wrap gap-1.5" aria-label={`Stack: ${spell.stack.join(", ")}`}>
+          {spell.stack.slice(0, 4).map(s => (
+            <span key={s} className="chip" aria-hidden="true">{s}</span>
+          ))}
+          {spell.stack.length > 4 && <span className="chip dark" aria-hidden="true">+{spell.stack.length - 4}</span>}
+        </div>
       </div>
 
-      {/* CTA */}
-      <div className="card-actions flex items-center justify-between gap-3 pt-4 border-t border-amber-200/10">
-        <button type="button" className="btn-gilded compact" onClick={() => onCopy(spell)} aria-label={`Copy prompt for ${spell.title}`} disabled={loading}>
-          {loading ? "Loading" : copyFailed ? "Copy failed" : copied ? "Copied" : "Copy prompt"}
-        </button>
-        <button type="button" className="btn-ghost compact" onClick={() => onOpen(spell)} aria-label={`View details for ${spell.title}`} disabled={loading}>
-          {loading ? "Loading" : "Details"}
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={() => onOpen(spell)}
+        className="cta-row card-action"
+        aria-labelledby={titleId}
+        disabled={loading}
+      >
+        <span>{loading ? "Loading scroll" : "Reveal Incantation"}</span>
+        <span className="arrow" aria-hidden="true">→</span>
+      </button>
     </article>
   );
 }
-
-// ─── Modal: the unfurled scroll ────────────────────────────────────────────
 
 function Modal({ spell, onClose }) {
   const [copied, setCopied] = useState(false);
@@ -246,18 +258,18 @@ function Modal({ spell, onClose }) {
   useEffect(() => {
     if (!spell) return;
     const previousActive = document.activeElement;
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key !== "Tab") return;
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose();
+      if (event.key !== "Tab") return;
       const focusable = dialogRef.current?.querySelectorAll("button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])");
       if (!focusable?.length) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
         last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
         first.focus();
       }
     };
@@ -286,180 +298,132 @@ function Modal({ spell, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 scrim flex items-start md:items-center justify-center overflow-y-auto p-4 md:p-10" onClick={onClose}>
+    <div className="scrim fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 md:items-center md:p-10" onClick={onClose}>
       <div
         ref={dialogRef}
-        onClick={e => e.stopPropagation()}
-        className={`relative w-full max-w-3xl my-auto rarity-${spell.rarity}`}
+        onClick={event => event.stopPropagation()}
+        className={`spellbook rarity-${spell.rarity} my-auto w-full max-w-3xl`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="spell-dialog-title"
       >
-        <div className="scroll-edge-top" />
-
-        <div className="scroll-body px-8 md:px-14 py-10 md:py-12 text-stone-900">
-          {/* Close */}
-          <button
-            ref={closeRef}
-            onClick={onClose}
-            className="absolute top-10 right-6 md:right-10 text-stone-700 hover:text-stone-900 text-2xl leading-none w-11 h-11 grid place-items-center"
-            aria-label="Close"
-          >×</button>
-
-          {/* Header */}
-          <div className="text-center mb-6">
-            <div className="caption-mono modal-kicker">
-              {spell.school} · {RARITY_LABEL[spell.rarity]}
+        <div className="spellbook-header">
+          <button ref={closeRef} onClick={onClose} className="x-btn absolute right-5 top-5" type="button" aria-label="Close">×</button>
+          <div className="relative z-10 flex items-center gap-5">
+            <div className="glyph-badge modal-glyph">
+              <SchoolIcon kind={spell.icon} className="h-9 w-9" />
             </div>
-            <h2 id="spell-dialog-title" className="font-display text-4xl md:text-5xl mt-3 mb-2 modal-title">
-              {spell.title}
-            </h2>
-            <p className="font-body italic text-stone-700 text-lg">
-              {spell.subtitle}
-            </p>
-            <div className="divider max-w-xs mx-auto mt-6 modal-divider">
-              <span className="glyph">✦</span>
+            <div className="min-w-0 flex-1 pr-12">
+              <div className="modal-kicker font-body mb-1.5 text-sm">
+                {spell.school} · {RARITY_LABEL[spell.rarity]}
+              </div>
+              <h2 id="spell-dialog-title" className="font-display text-3xl leading-none md:text-4xl">
+                {spell.title}
+              </h2>
+              <p className="font-body modal-subtitle mt-1.5 text-base md:text-lg">
+                {spell.subtitle}
+              </p>
             </div>
           </div>
+        </div>
 
-          {/* Stat grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-6 text-center">
-            <Stat
-              label="Difficulty"
-              value={"●".repeat(spell.difficulty) + "○".repeat(5 - spell.difficulty)}
-              ariaValue={`Difficulty ${spell.difficulty} out of 5`}
-            />
-            <Stat label="Cast Time" value={spell.castTime} />
-            <Stat label="Rarity" value={RARITY_LABEL[spell.rarity]} />
-            <Stat label="School" value={spell.school} />
+        <div className="px-6 pb-8 pt-10 md:px-9">
+          <div className="mb-7 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <StatTile label="Difficulty">
+              <span className="diff-dots" aria-label={`Difficulty ${spell.difficulty} out of 5`}>
+                {[0, 1, 2, 3, 4].map(i => (
+                  <span key={i} className={`d ${i < spell.difficulty ? "on" : ""}`} />
+                ))}
+              </span>
+            </StatTile>
+            <StatTile label="Cast Time">{spell.castTime}</StatTile>
+            <StatTile label="Rarity"><span className={`rarity-dot rarity-dot-${spell.rarity}`} aria-hidden="true" />{RARITY_LABEL[spell.rarity]}</StatTile>
+            <StatTile label="School">{spell.school}</StatTile>
           </div>
 
-          {/* Reagents + effect */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <div className="mb-7 grid gap-6 md:grid-cols-2">
             <div>
-              <h4 className="font-display text-sm uppercase text-stone-600 mb-2">Material Reagents</h4>
-              <ul className="font-body text-stone-800 space-y-1">
-                {spell.reagents.map(r => (
-                  <li key={r} className="flex items-start gap-2"><span className="modal-bullet mt-1">◆</span><span>{r}</span></li>
+              <h4 className="font-display section-title mb-3 text-xl"><span className="text-pink" aria-hidden="true">◆</span> Material Reagents</h4>
+              <ul className="font-body modal-list space-y-1.5">
+                {spell.reagents.map(reagent => (
+                  <li key={reagent} className="flex items-start gap-2">
+                    <span className="text-tangerine mt-0.5" aria-hidden="true">▸</span>
+                    <span>{reagent}</span>
+                  </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="font-display text-sm uppercase text-stone-600 mb-2">Effect Upon Casting</h4>
-              <p className="font-body text-stone-800 leading-relaxed drop-cap">
-                {spell.effect}
-              </p>
+              <h4 className="font-display section-title mb-3 text-xl"><span className="text-mint" aria-hidden="true">✦</span> Effect Upon Casting</h4>
+              <p className="font-body modal-body leading-relaxed drop-cap">{spell.effect}</p>
             </div>
           </div>
 
-          {/* Stack */}
-          <div className="mb-6">
-            <h4 className="font-display text-sm uppercase text-stone-600 mb-2">Schools Invoked</h4>
+          <div className="mb-7">
+            <h4 className="font-display section-title mb-3 text-xl"><span className="text-plum" aria-hidden="true">✧</span> Schools Invoked</h4>
             <div className="flex flex-wrap gap-2">
-              {spell.stack.map(s => (
-                <span key={s} className="modal-tag font-mono text-xs px-2.5 py-1 rounded-sm">{s}</span>
+              {spell.stack.map(stack => (
+                <span key={stack} className="chip">{stack}</span>
               ))}
             </div>
           </div>
 
-          {/* The incantation */}
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="font-display text-sm uppercase text-stone-600">Prompt text</h4>
-              <button onClick={copy} className="btn-gilded" aria-describedby="copy-status">
-                {copyError ? "Copy failed" : copied ? "Copied" : "Copy prompt"}
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+              <h4 className="font-display section-title text-xl"><span className="text-gold" aria-hidden="true">✦</span> The Incantation</h4>
+              <button onClick={copy} className={`btn-fat ${copied ? "lime" : ""}`} type="button" aria-describedby="copy-status">
+                {copyError ? "Copy failed" : copied ? "Inscribed" : "Copy Scroll"}
               </button>
             </div>
             <p id="copy-status" className="sr-only" aria-live="polite">
               {copyError ? "Copy failed. Select the prompt text and copy it manually." : copied ? "Prompt copied." : ""}
             </p>
-            <pre className="incantation-block p-5 md:p-6 max-h-[420px] overflow-y-auto">{spell.prompt}</pre>
+            <pre className="incantation-block max-h-[420px] overflow-y-auto p-5 md:p-6">{spell.prompt}</pre>
           </div>
 
-          {/* Cast directions */}
-          <div className="border-t border-stone-400/30 pt-5">
-            <h4 className="font-display text-sm uppercase text-stone-600 mb-2">How to Cast</h4>
-            <ol className="font-body text-stone-800 space-y-1.5 list-decimal pl-5">
-              <li>Press <span className="font-mono text-sm bg-stone-900/10 px-1.5 py-0.5 rounded">Copy prompt</span> above.</li>
+          <div className="chunky-sm cast-note p-5">
+            <h4 className="font-display section-title mb-2.5 text-xl"><span className="text-pink" aria-hidden="true">♥</span> How to Cast</h4>
+            <ol className="font-body modal-list list-decimal space-y-1.5 pl-5">
+              <li>Press <strong>Copy Scroll</strong> above.</li>
               <li>Open Claude, Codex, Cursor, or another coding assistant.</li>
-              <li>Paste the prompt. Replace the bracketed <span className="font-mono text-xs">[DESCRIBE…]</span> line with what you actually want.</li>
+              <li>Paste the incantation. Replace the bracketed <span className="font-mono text-sm">[DESCRIBE...]</span> line with what you actually want.</li>
               <li>Run it, then review the proposed work before approving changes.</li>
             </ol>
           </div>
         </div>
-
-        <div className="scroll-edge-bottom" />
       </div>
     </div>
   );
 }
 
-function Stat({ label, value, ariaValue }) {
+function StatTile({ label, children }) {
   return (
-    <div className="modal-stat">
-      <div className="caption-mono mb-1 modal-stat-label">{label}</div>
-      <div className="font-display text-stone-900" aria-label={ariaValue || `${label}: ${value}`}>
-        <span aria-hidden={ariaValue ? "true" : undefined}>{value}</span>
-      </div>
+    <div className="stat-tile">
+      <div className="caption mb-1.5">{label}</div>
+      <div className="font-body stat-value flex items-center gap-1.5 text-base">{children}</div>
     </div>
   );
 }
 
-function CatalogIntro({ totalCount, onOpenStarter, onCopyStarter, copiedStarter, loadingStarter }) {
+function Footer() {
   return (
-    <section className="catalog-intro max-w-6xl mx-auto px-6 mb-8">
-      <div>
-        <p className="caption-mono mb-2">Curated defaults, not prompt trivia</p>
-        <h2 className="font-display text-3xl md:text-4xl text-amber-50 mb-3">Start with the thing you want to build.</h2>
-        <p className="font-body text-amber-50/75 text-lg leading-relaxed">
-          The collection is organized by outcome. If you are new here, start with the Astro site prompt, then branch into apps, APIs, bots, and extensions.
-        </p>
-        <p className="catalog-guidance font-body text-amber-100/70 leading-relaxed">
-          Replace the bracketed request, run the prompt, then review the diff before you ship.
-        </p>
-      </div>
-      <div className="starter-panel rarity-common">
-        <span className="caption-mono">Recommended first prompt</span>
-        <strong>The Eternal Page</strong>
-        <p>Static site or blog with Astro, MDX, content collections, and deployment defaults.</p>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" className="btn-gilded compact" onClick={onCopyStarter} aria-label="Copy prompt for The Eternal Page" disabled={loadingStarter}>
-            {loadingStarter ? "Loading" : copiedStarter ? "Copied" : "Copy prompt"}
-          </button>
-          <button type="button" className="btn-ghost compact" onClick={onOpenStarter} aria-label="View details for The Eternal Page" disabled={loadingStarter}>
-            {loadingStarter ? "Loading" : "View details"}
-          </button>
+    <footer className="mt-24">
+      <div className="banner-stitch" />
+      <div className="mx-auto max-w-4xl px-6 py-14 text-center">
+        <div className="mb-6 flex items-center justify-center gap-3">
+          <Sparkle size={28} className="sparkle-gold spin-slow" />
+          <span className="font-display footer-title text-3xl">Finis</span>
+          <Sparkle size={28} className="sparkle-pink spin-slow" />
         </div>
+        <p className="font-body text-base leading-relaxed md:text-lg">
+          Compiled with reverence at <strong>promptsformortals.com</strong>.
+          <br />Read the scroll, adjust the bracketed request, then review what your assistant changes.
+        </p>
+        <p className="caption mt-6">Made for people who want useful defaults before clever wording.</p>
       </div>
-      <p className="catalog-count caption-mono">{totalCount} prompts in the library</p>
-    </section>
-  );
-}
-
-// ─── Footer ────────────────────────────────────────────────────────────────
-
-function Footer({ onReturn }) {
-  return (
-    <footer className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
-      <div className="divider max-w-md mx-auto mb-8">
-        <span className="glyph">⚜ FINIS ⚜</span>
-      </div>
-      <p className="font-body italic text-amber-100/60 text-base leading-relaxed">
-        Compiled with reverence at <span className="font-mono not-italic text-amber-200/80">promptsformortals.com</span>.
-        <br />
-        Read the prompt, adjust the bracketed request, then review what your assistant changes.
-      </p>
-      <p className="caption-mono mt-8 text-amber-200/40">
-        Made for people who want useful defaults before clever wording.
-      </p>
-      <button type="button" className="footer-return btn-ghost mt-8" onClick={onReturn}>
-        Return to catalog
-      </button>
     </footer>
   );
 }
-
-// ─── App ───────────────────────────────────────────────────────────────────
 
 /**
  * @param {{ incantations?: Array<Record<string, any>> }} props
@@ -468,13 +432,19 @@ export default function PromptGrimoire({ incantations = [] }) {
   const [rarity, setRarity] = useState("all");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(null);
-  const [copiedId, setCopiedId] = useState(null);
-  const [copyFailedId, setCopyFailedId] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
   const [catalogStatus, setCatalogStatus] = useState("");
+  const [theme, setTheme] = useState(getInitialTheme);
   const promptCache = useRef(new Map());
 
-  const starter = useMemo(() => incantations.find(s => s.id === "static"), [incantations]);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem("pfm-theme", theme);
+    } catch {
+      // Ignore storage restrictions.
+    }
+  }, [theme]);
 
   const loadPrompt = async (spell) => {
     if (spell.prompt) return spell;
@@ -491,37 +461,13 @@ export default function PromptGrimoire({ incantations = [] }) {
 
   const handleOpen = async (spell) => {
     setLoadingId(spell.id);
-    setCopyFailedId(null);
+    setCatalogStatus(`Loading ${spell.title} prompt.`);
     try {
       setOpen(await loadPrompt(spell));
+      setCatalogStatus("");
     } catch {
-      setCopyFailedId(spell.id);
-    } finally {
-      setLoadingId(null);
-    }
-  };
-
-  const handleCopy = async (spell) => {
-    setLoadingId(spell.id);
-    try {
-      const fullSpell = await loadPrompt(spell);
-      const ok = await copyPrompt(fullSpell.prompt);
-      setCopiedId(ok ? spell.id : null);
-      setCopyFailedId(ok ? null : spell.id);
-      setCatalogStatus(ok ? `Copied ${spell.title} prompt.` : `Could not copy ${spell.title} prompt. Open details and copy it manually.`);
-      setTimeout(() => {
-        setCopiedId(null);
-        setCopyFailedId(null);
-        setCatalogStatus("");
-      }, 1800);
-    } catch {
-      setCopiedId(null);
-      setCopyFailedId(spell.id);
       setCatalogStatus(`Could not load ${spell.title} prompt. Try again.`);
-      setTimeout(() => {
-        setCopyFailedId(null);
-        setCatalogStatus("");
-      }, 2600);
+      window.setTimeout(() => setCatalogStatus(""), 2600);
     } finally {
       setLoadingId(null);
     }
@@ -529,96 +475,89 @@ export default function PromptGrimoire({ incantations = [] }) {
 
   const filtered = useMemo(() => {
     let arr = incantations;
-    if (rarity !== "all") arr = arr.filter(s => s.rarity === rarity);
+    if (rarity !== "all") arr = arr.filter(spell => spell.rarity === rarity);
     const q = query.trim().toLowerCase();
     if (q) {
-      arr = arr.filter(s =>
-        s.title.toLowerCase().includes(q) ||
-        s.subtitle.toLowerCase().includes(q) ||
-        s.summary.toLowerCase().includes(q) ||
-        s.stack.some(t => t.toLowerCase().includes(q)) ||
-        s.school.toLowerCase().includes(q)
+      arr = arr.filter(spell =>
+        spell.title.toLowerCase().includes(q) ||
+        spell.subtitle.toLowerCase().includes(q) ||
+        spell.summary.toLowerCase().includes(q) ||
+        spell.stack.some(tag => tag.toLowerCase().includes(q)) ||
+        spell.school.toLowerCase().includes(q)
       );
     }
-    if (rarity === "all" && !q) arr = arr.filter(s => s.id !== "static");
-    // sort by rarity asc then difficulty
-    return arr.slice().sort((a,b) =>
+    return arr.slice().sort((a, b) =>
       RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity) || a.difficulty - b.difficulty
     );
   }, [incantations, rarity, query]);
 
-  return (
-    <div className="night-sky min-h-screen">
-      {/* Top banner edge */}
-      <div className="banner-edge" />
+  const toggleTheme = () => setTheme(current => current === "dark" ? "light" : "dark");
 
-      {/* Tiny nav row */}
-      <nav className="site-nav max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 caption-mono">
-          <span className="text-amber-200">✦</span>
-          <span>promptsformortals.com</span>
+  return (
+    <div className="cartoon-sky min-h-screen">
+      <nav className="site-nav relative z-20 mx-auto flex max-w-6xl items-center justify-between px-6 pt-6">
+        <div className="flex items-center gap-2">
+          <Sparkle size={22} className="sparkle-gold" />
+          <span className="font-body site-name text-sm">promptsformortals.com</span>
         </div>
-        <div className="flex items-center gap-4 caption-mono">
-          <a href="#tome" className="hover:text-amber-200 transition-colors">The Tome</a>
-          <a href="#about" className="hover:text-amber-200 transition-colors">About</a>
+        <div className="flex items-center gap-2 md:gap-3">
+          <a href="#tome" className="btn-pill">The Tome</a>
+          <a href="#about" className="btn-pill hidden md:inline-flex">About</a>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="btn-pill theme-toggle"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? <Sun size={18} /> : <ToggleMoon size={18} />}
+            <span className="hidden md:inline">{theme === "dark" ? "Day" : "Night"}</span>
+          </button>
         </div>
       </nav>
 
-      <Hero />
+      <Hero theme={theme} />
 
-      <main id="tome" className="pb-20">
+      <main id="tome" className="relative z-10 pb-20">
         <p className="sr-only" aria-live="polite" aria-atomic="true">{catalogStatus}</p>
-
-        {starter && (
-          <CatalogIntro
-            totalCount={incantations.length}
-            onOpenStarter={() => handleOpen(starter)}
-            onCopyStarter={() => handleCopy(starter)}
-            copiedStarter={copiedId === starter.id}
-            loadingStarter={loadingId === starter.id}
-          />
-        )}
 
         <FilterBar rarity={rarity} setRarity={setRarity} query={query} setQuery={setQuery} resultCount={filtered.length} />
 
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="mx-auto max-w-6xl px-6">
           <div className="spell-catalog">
-            {filtered.map(s => (
+            {filtered.map(spell => (
               <SpellCard
-                key={s.id}
-                spell={s}
+                key={spell.id}
+                spell={spell}
                 onOpen={handleOpen}
-                onCopy={handleCopy}
-                copied={copiedId === s.id}
-                copyFailed={copyFailedId === s.id}
-                loading={loadingId === s.id}
+                loading={loadingId === spell.id}
               />
             ))}
           </div>
 
           {filtered.length === 0 && (
-            <div className="text-center py-20">
-              <p className="font-display text-2xl text-amber-100/60 mb-2">No prompts found</p>
-              <p className="font-body italic text-amber-100/40">Try a stack, platform, or use case like API, mobile, or Tauri.</p>
+            <div className="empty-state py-20 text-center">
+              <Sparkle size={56} className="sparkle-pink mx-auto mb-4" />
+              <p className="font-display mb-2 text-3xl">No scrolls found</p>
+              <p className="font-body text-lg">The librarian shrugs. Try API, mobile, Tauri, or clear the search.</p>
+              {query && <button type="button" className="btn-fat mt-5" onClick={() => setQuery("")}>Clear search</button>}
             </div>
           )}
         </div>
 
-        {/* About strip */}
-        <section id="about" className="max-w-3xl mx-auto px-6 mt-24">
-          <div className="divider mb-8"><span className="glyph">ON THE NATURE OF THIS WORK</span></div>
-          <p className="font-body text-amber-50/85 text-lg leading-relaxed drop-cap">
-            Large language models are useful builders, but vague requests still produce vague software. Each prompt here is opinionated on purpose: it picks libraries, file layout, and conventions so the model does not have to guess. Adapt the defaults when you have a reason, then read the result before you ship it.
-          </p>
+        <section id="about" className="mx-auto mt-24 max-w-3xl px-6">
+          <div className="parchment-strip">
+            <div className="mb-4 flex items-center gap-3">
+              <Sparkle size={32} className="sparkle-pink" />
+              <h2 className="font-display text-3xl md:text-4xl">On the Nature of This Work</h2>
+            </div>
+            <p className="font-body drop-cap text-lg leading-relaxed">
+              Large language models are useful builders, but vague requests still produce vague software. Each scroll here is opinionated on purpose: it picks libraries, file layout, and conventions so the model does not have to guess. Adapt the defaults when you have a reason, then read the result before you ship it.
+            </p>
+          </div>
         </section>
       </main>
 
-      <Footer
-        onReturn={() => {
-          const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          document.getElementById("tome")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-        }}
-      />
+      <Footer />
 
       <Modal spell={open} onClose={() => setOpen(null)} />
     </div>
