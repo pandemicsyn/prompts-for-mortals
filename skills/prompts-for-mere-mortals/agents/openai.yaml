@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prompts for Mere Mortals"
+  short_description: "Choose and execute opinionated app starters"
+  default_prompt: "Use $prompts-for-mere-mortals to pick the right starter and build my app with strong defaults."

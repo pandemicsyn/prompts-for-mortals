@@ -23,6 +23,22 @@ src/content/incantations/api.md
 
 Add or edit prompts by changing those files. Frontmatter is validated in `src/content.config.ts`; the Markdown body becomes the copyable prompt text.
 
+## Companion Skill
+
+Install the Prompts for Mere Mortals companion skill for Codex:
+
+```sh
+npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mere-mortals -a codex
+```
+
+For a global install:
+
+```sh
+npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mere-mortals -a codex -g
+```
+
+Use the direct skill path above instead of `--all`; this repo also contains local helper skills under `.agents/skills/`.
+
 ## Checks
 
 ```sh
