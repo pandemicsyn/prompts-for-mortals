@@ -1,5 +1,5 @@
 ---
-name: prompts-for-mere-mortals
+name: prompts-for-mortals
 description: Choose and execute opinionated app starters from Prompts for Mere Mortals. Use when a user asks Codex to start, scaffold, plan, or build a static site/blog, full-stack web app, API, Discord or Slack bot, browser extension, mobile app, desktop app, or CLI and wants strong defaults for stack selection, Cloudflare deployment, package safety, quality gates, and next steps.
 ---
 
@@ -50,4 +50,4 @@ This skill and the website prompt files are manually synced. When adding, removi
 
 1. Update `src/content/incantations/*.md`.
 2. Update [references/incantations.md](references/incantations.md).
-3. Run `node skills/prompts-for-mere-mortals/scripts/check-incantation-sync.mjs`.
+3. Run `node skills/prompts-for-mortals/scripts/check-incantation-sync.mjs`.

@@ -4,7 +4,7 @@ import { join, resolve } from "node:path";
 
 const root = resolve(new URL("../../..", import.meta.url).pathname);
 const contentDir = join(root, "src/content/incantations");
-const referencePath = join(root, "skills/prompts-for-mere-mortals/references/incantations.md");
+const referencePath = join(root, "skills/prompts-for-mortals/references/incantations.md");
 
 function readWebsiteIds() {
   return readdirSync(contentDir)
