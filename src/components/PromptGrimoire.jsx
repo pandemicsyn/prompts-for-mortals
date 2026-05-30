@@ -611,7 +611,7 @@ export default function PromptGrimoire({ incantations = [] }) {
               <span>PR</span>
             </div>
             <div className="contribution-copy">
-              <p className="council-label">Council of Mages</p>
+              <p className="council-label">Notice from the council of mages</p>
               <h2 id="council-title" className="font-display text-3xl leading-tight md:text-4xl">Add a Prompt to the Codex</h2>
               <p className="font-body mt-3 max-w-3xl text-lg leading-relaxed">
                 If you want to add a prompt to the codex, or think the stack of a spell could be improved, open a PR and add it to the tome.
