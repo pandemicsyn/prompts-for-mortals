@@ -5,7 +5,7 @@ subtitle: "Inscribe a blazing-fast site or blog"
 school: "Abjuration"
 rarity: "common"
 difficulty: 1
-castTime: "10–20 min"
+userLevel: "First Year"
 icon: "static"
 reagents: ["Node 20+", "Markdown"]
 effect: "A statically-generated site with MDX, RSS, sitemap, Cloudflare deployment, and a perfect Lighthouse score."

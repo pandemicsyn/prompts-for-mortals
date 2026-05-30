@@ -5,7 +5,7 @@ subtitle: "Bind a spell to Chrome, Firefox & Edge"
 school: "Illusion"
 rarity: "rare"
 difficulty: 2
-castTime: "20–40 min"
+userLevel: "Apprentice"
 icon: "extension"
 reagents: ["Node 20+", "Chrome or Firefox"]
 effect: "A browser extension with a popup, content scripts, and an options page — that works in every browser."

@@ -536,7 +536,7 @@ body {
   background: var(--hot-pink);
 }
 
-.timepill {
+.levelpill {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -551,7 +551,7 @@ body {
   padding: 0.18rem 0.68rem;
 }
 
-.timepill span {
+.levelpill span {
   font-size: 0.68rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;

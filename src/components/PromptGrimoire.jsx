@@ -225,7 +225,9 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loadingAction })
               ))}
             </span>
           </div>
-          <div className="timepill"><span aria-hidden="true">Time</span>{spell.castTime}</div>
+          <div className="levelpill" aria-label={`User level: ${spell.userLevel}`}>
+            <span aria-hidden="true">Level</span>{spell.userLevel}
+          </div>
         </div>
 
         <p className="font-body card-summary text-[0.97rem] leading-relaxed">{spell.summary}</p>
@@ -350,7 +352,7 @@ function Modal({ spell, onClose }) {
                 ))}
               </span>
             </StatTile>
-            <StatTile label="Cast Time">{spell.castTime}</StatTile>
+            <StatTile label="User Level">{spell.userLevel}</StatTile>
             <StatTile label="Rarity"><span className={`rarity-dot rarity-dot-${spell.rarity}`} aria-hidden="true" />{RARITY_LABEL[spell.rarity]}</StatTile>
             <StatTile label="School">{spell.school}</StatTile>
           </div>

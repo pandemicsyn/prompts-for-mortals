@@ -5,7 +5,7 @@ subtitle: "Bind a bot to Discord slash commands"
 school: "Necromancy"
 rarity: "rare"
 difficulty: 2
-castTime: "20–40 min"
+userLevel: "Apprentice"
 icon: "bot"
 reagents: ["Cloudflare account", "Discord developer app"]
 effect: "A serverless bot that responds to slash commands and runs free-forever on the edge."

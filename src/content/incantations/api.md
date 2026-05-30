@@ -5,7 +5,7 @@ subtitle: "Erect a fast API at the edge"
 school: "Abjuration"
 rarity: "epic"
 difficulty: 3
-castTime: "30–60 min"
+userLevel: "Practitioner"
 icon: "api"
 reagents: ["Cloudflare account", "A database"]
 effect: "A typed, validated, rate-limited HTTP API deployed worldwide on the edge for free."

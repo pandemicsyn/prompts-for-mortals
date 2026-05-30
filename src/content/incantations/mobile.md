@@ -5,7 +5,7 @@ subtitle: "Conjure an iOS + Android app from a single spell"
 school: "Transmutation"
 rarity: "epic"
 difficulty: 3
-castTime: "30–60 min"
+userLevel: "Practitioner"
 icon: "mobile"
 reagents: ["Node LTS", "Expo account", "A phone or simulator"]
 effect: "A real native app on your phone fast — Expo Go when compatible, a development build when native modules demand it."

@@ -11,7 +11,7 @@ const incantations = defineCollection({
     school: z.string(),
     rarity: z.enum(["common", "rare", "epic", "legendary"]),
     difficulty: z.number().int().min(1).max(5),
-    castTime: z.string(),
+    userLevel: z.enum(["First Year", "Apprentice", "Practitioner"]),
     icon: z.enum(["desktop", "mobile", "web", "cli", "extension", "bot", "static", "api"]),
     reagents: z.array(z.string()).min(1),
     effect: z.string(),

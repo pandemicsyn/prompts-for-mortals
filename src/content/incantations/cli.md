@@ -5,7 +5,7 @@ subtitle: "Forge a fast, beautiful CLI tool"
 school: "Enchantment"
 rarity: "rare"
 difficulty: 2
-castTime: "15–30 min"
+userLevel: "Apprentice"
 icon: "cli"
 reagents: ["Go 1.26+", "A terminal you love"]
 effect: "A fast, cross-platform Go CLI with subcommands, useful help, typed config, and release binaries."

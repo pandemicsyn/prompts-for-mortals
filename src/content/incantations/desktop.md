@@ -5,7 +5,7 @@ subtitle: "Summon a native app for Mac, Windows & Linux"
 school: "Conjuration"
 rarity: "epic"
 difficulty: 3
-castTime: "20–40 min"
+userLevel: "Practitioner"
 icon: "desktop"
 reagents: ["Rust toolchain", "Node 20+", "pnpm"]
 effect: "A signed, installable desktop app with a real window, system tray, native menus, and a React UI inside."

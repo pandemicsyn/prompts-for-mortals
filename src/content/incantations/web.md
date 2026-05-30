@@ -5,7 +5,7 @@ subtitle: "Weave a full-stack web app with auth, db, and payments"
 school: "Evocation"
 rarity: "legendary"
 difficulty: 4
-castTime: "1–2 hours"
+userLevel: "Practitioner"
 icon: "web"
 reagents: ["Node 20+", "D1 or PlanetScale", "Stripe & Resend keys"]
 effect: "A production-grade TanStack Start app: auth, database, billing, transactional email, deployed on Cloudflare Workers."
