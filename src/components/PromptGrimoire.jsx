@@ -136,7 +136,7 @@ function Hero({ theme }) {
 
       <p className="font-body relative z-10 mx-auto mt-10 max-w-2xl text-lg leading-relaxed md:text-xl">
         A pocket-sized collection of <strong className="text-gold">battle-tested prompts</strong> for{" "}
-        <strong className="text-pink">Claude</strong>, <strong className="text-mint">Codex</strong>, and friends.
+        <strong className="text-pink">Kilo</strong>, <strong className="text-mint">Codex</strong>, <strong className="text-gold">Claude</strong>, and friends.
         Pick a school. Copy the scroll. Watch a real app appear.
       </p>
 
@@ -611,7 +611,10 @@ export default function PromptGrimoire({ incantations = [] }) {
               <span>PR</span>
             </div>
             <div className="contribution-copy">
-              <p className="council-label">Notice from the council of mages</p>
+              <p className="council-label" aria-label="Notice from the council of mages">
+                <span className="council-label-stamp">Notice</span>
+                <span className="council-label-text">from the council of mages</span>
+              </p>
               <h2 id="council-title" className="font-display text-3xl leading-tight md:text-4xl">Add a Prompt to the Codex</h2>
               <p className="font-body mt-3 max-w-3xl text-lg leading-relaxed">
                 If you want to add a prompt to the codex, or think the stack of a spell could be improved, open a PR and add it to the tome.
