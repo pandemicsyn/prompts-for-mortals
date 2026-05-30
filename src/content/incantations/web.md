@@ -27,13 +27,20 @@ You are building a full-stack web application. Follow these constraints EXACTLY:
 
 # Supply-chain defaults
 - Use pnpm for JavaScript dependencies.
-- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
-- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, create the parent `pnpm-workspace.yaml` from inside the directory where the command will run:
+  ```yaml
+  packages:
+    - <app-name>
+  minimumReleaseAge: 4320
+  resolutionMode: highest
+  ```
+- NEVER add `minimumReleaseAgeExclude`. If a required package is too fresh, pin to the newest compatible version that is at least three days old. If no compatible package set exists yet, stop and say the stack needs to wait for packages to age into policy.
+- To find the newest allowed version, run `pnpm view <package> time --json` and choose the newest stable version older than the three-day cutoff.
 
 # Bootstrapping
-1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
-2. `pnpm create cloudflare@latest <app-name> --framework=tanstack-start`
-3. Add shadcn/ui using the TanStack Start/Vite-compatible setup: `pnpm dlx shadcn@latest init`, then add only the components you use. Pick neutral and CSS variables.
+1. Create the parent project directory and add the `pnpm-workspace.yaml` above with `<app-name>` set to the app directory you will scaffold.
+2. From that parent directory, run `pnpm create cloudflare@latest <app-name> --framework=tanstack-start --no-deploy --no-open --no-git`. Do not add `--accept-defaults`; current C3 can otherwise scaffold the generic Worker template instead of TanStack Start.
+3. Add shadcn/ui using the current TanStack Start-compatible CLI: `pnpm dlx shadcn@latest init --template start`. Answer the prompts explicitly: TypeScript = yes, CSS variables = yes, and choose the closest neutral preset/style. Do not assume old flags like `--base-color neutral` exist.
 4. Install app dependencies: `pnpm add better-auth @t3-oss/env-core sonner stripe resend react-email zod`.
 5. Install Drizzle and the chosen database driver. For D1: `pnpm add drizzle-orm` + `pnpm add -D drizzle-kit wrangler`. For PlanetScale: `pnpm add drizzle-orm @planetscale/database` + `pnpm add -D drizzle-kit`.
 6. Wire Better Auth with the Drizzle adapter and `tanstackStartCookies()` as the final plugin BEFORE building any pages.
@@ -43,6 +50,7 @@ You are building a full-stack web application. Follow these constraints EXACTLY:
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript`.
 - Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
 - Keep `build`, `preview`, and `deploy` scripts explicit. `deploy` should build TanStack Start, then run `wrangler deploy`.
+- Run the TanStack dev server or build once before raw `tsc --noEmit` so `src/routeTree.gen.ts` exists.
 - Run `pnpm run check` and `pnpm run build` before saying the work is done.
 
 # Architecture

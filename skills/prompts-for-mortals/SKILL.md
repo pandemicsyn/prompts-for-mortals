@@ -13,9 +13,15 @@ Use this skill to turn an app idea into one of the Prompts for Mere Mortals star
 2. Ask a clarifying question only when two starters are genuinely plausible and the choice changes the stack.
 3. Apply the starter's non-negotiable stack and banned substitutions.
 4. Configure supply-chain safety before installing packages:
-   - pnpm projects: create or update `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
+   - pnpm projects: create or update parent `pnpm-workspace.yaml` before create/dlx/add commands:
+     ```yaml
+     packages:
+       - <app-name>
+     minimumReleaseAge: 4320
+     resolutionMode: highest
+     ```
+   - Never add `minimumReleaseAgeExclude`. Pin to the newest compatible version older than the three-day cutoff, or stop and say the stack must wait for packages to age into policy.
    - Go projects: use modules, commit `go.mod` and `go.sum`, and run `go mod tidy` after dependency changes.
-   - Do not add package-age exclusions unless the user explicitly accepts that tradeoff.
 5. Install quality tooling before feature work unless the starter reference says otherwise.
 6. Implement in the host repo's existing style when modifying an existing project. For new projects, scaffold the starter directly.
 7. Run the starter's quality gates and a build or deploy dry run before calling the work done.

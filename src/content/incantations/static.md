@@ -23,16 +23,24 @@ You are building a static site or blog. Follow these constraints EXACTLY:
 
 # Supply-chain defaults
 - Use pnpm for JavaScript dependencies.
-- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
-- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, create the parent `pnpm-workspace.yaml` from inside the directory where the command will run:
+  ```yaml
+  packages:
+    - <app-name>
+  minimumReleaseAge: 4320
+  resolutionMode: highest
+  ```
+- NEVER add `minimumReleaseAgeExclude`. If a required package is too fresh, pin to the newest compatible version that is at least three days old. If no compatible package set exists yet, stop and say the stack needs to wait for packages to age into policy.
+- To find the newest allowed version, run `pnpm view <package> time --json` and choose the newest stable version older than the three-day cutoff.
 
 # Bootstrapping
-1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
-2. `pnpm create astro@latest` — pick "Empty", TypeScript strict.
-3. `pnpm astro add mdx sitemap`
-4. Add Tailwind v4 with `pnpm add tailwindcss @tailwindcss/vite`, import `@import "tailwindcss";` in the global CSS entry, and add `tailwindcss()` to `vite.plugins` in `astro.config.mjs`.
-5. Add `@astrojs/cloudflare`, set `output: 'server'`, and configure Wrangler for Workers deployment.
-6. If the user explicitly requests static-only hosting, document the tradeoff and switch to `output: 'static'` with Cloudflare Pages.
+1. Create the parent project directory and add the `pnpm-workspace.yaml` above with `<app-name>` set to the app directory you will scaffold.
+2. `pnpm create astro@latest <app-name> -- --template minimal --typescript strict --install --no-git`
+3. Inspect generated Astro package versions against the age gate. If `astro@latest` is too fresh, pin the newest allowed Astro version and run `pnpm install` from the workspace root.
+4. Add MDX and sitemap only with compatible age-allowed versions. For example: `pnpm add @astrojs/mdx@<allowed> @astrojs/sitemap@<allowed>`.
+5. Add Tailwind v4 with age-allowed versions of `tailwindcss` and `@tailwindcss/vite`, import `@import "tailwindcss";` in the global CSS entry, and add `tailwindcss()` to `vite.plugins` in `astro.config.mjs`.
+6. Add `@astrojs/cloudflare` only when there is a compatible age-allowed version for the selected Astro version, set `output: 'server'`, and configure Wrangler for Workers deployment.
+7. If the user explicitly requests static-only hosting, document the tradeoff and switch to `output: 'static'` with Cloudflare Pages.
 
 # Quality gates
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt prettier prettier-plugin-astro @astrojs/check typescript`.

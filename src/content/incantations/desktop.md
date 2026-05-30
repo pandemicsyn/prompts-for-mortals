@@ -23,12 +23,19 @@ You are building a cross-platform desktop application. Follow these constraints 
 
 # Supply-chain defaults
 - Use pnpm for JavaScript dependencies.
-- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
-- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, create the parent `pnpm-workspace.yaml` from inside the directory where the command will run:
+  ```yaml
+  packages:
+    - <app-name>
+  minimumReleaseAge: 4320
+  resolutionMode: highest
+  ```
+- NEVER add `minimumReleaseAgeExclude`. If a required package is too fresh, pin to the newest compatible version that is at least three days old. If no compatible package set exists yet, stop and say the stack needs to wait for packages to age into policy.
+- To find the newest allowed version, run `pnpm view <package> time --json` and choose the newest stable version older than the three-day cutoff.
 
 # Bootstrapping
-1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
-2. Run `pnpm create tauri-app@latest` and pick: React, TypeScript, Vite, pnpm.
+1. Create the parent project directory and add the `pnpm-workspace.yaml` above with `<app-name>` set to the app directory you will scaffold.
+2. From that parent directory, run `pnpm create tauri-app@latest <app-name>` and pick: React, TypeScript, Vite, pnpm.
 3. Add Tailwind v4 via `@tailwindcss/vite`. Configure dark mode via `class` on <html>.
 4. Set up Biome with `pnpm dlx @biomejs/biome init`.
 5. Add required Tauri plugins: `pnpm tauri add store window-state global-shortcut updater`.

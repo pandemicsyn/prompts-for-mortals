@@ -9,38 +9,47 @@ castTime: "30–60 min"
 icon: "mobile"
 reagents: ["Node LTS", "Expo account", "A phone or simulator"]
 effect: "A real native app on your phone fast — Expo Go when compatible, a development build when native modules demand it."
-stack: ["Expo SDK 56", "React Native 0.85", "React 19.2.3", "Expo Router", "TypeScript"]
+stack: ["Expo SDK 55", "React Native 0.83", "React 19.2", "Expo Router", "TypeScript"]
 summary: "Expo is the only sane way to start a mobile app in 2026. File-based routing, OTA updates, EAS builds, and a clean path from QR-code prototype to native build."
 ---
 You are building a mobile app for iOS and Android using Expo. Follow these constraints EXACTLY:
 
 # Stack (non-negotiable)
-- Expo SDK 56 when native builds are acceptable. Use SDK 55 only when Expo Go on a physical device is the user's explicit priority during the SDK 56 transition.
-- React Native 0.85 and React 19.2.3 through Expo SDK 56; do not manually chase React Native versions outside Expo's supported matrix.
+- Expo SDK 55 as the strict-age default because it installs under `minimumReleaseAge: 4320`. Use SDK 56 only after all required SDK 56 packages have aged past the three-day gate.
+- React Native and React versions come from the selected Expo SDK; do not manually chase React Native versions outside Expo's supported matrix.
 - Expo Router (file-based routing) — NOT direct `@react-navigation/*` imports in application code.
 - NativeWind v4 for styling if the app needs Tailwind-style utilities. Otherwise use plain React Native styles or Expo UI primitives when they fit better.
 - TypeScript, strict mode
 - Zustand for global state, TanStack Query for server state
 - expo-sqlite + Drizzle ORM for local persistence
-- Do not add Reanimated by default. Add it only when the requested app needs gesture-heavy or complex UI-thread animation.
+- Do not build features around Reanimated unless the requested app needs gesture-heavy or complex UI-thread animation. Some Expo templates include Reanimated/worklets as template dependencies; do not use that as a reason to add animation architecture.
 
 # Supply-chain defaults
 - Use pnpm for JavaScript dependencies.
-- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, make sure the target project or parent workspace has `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`. Three days is the default age gate for direct and transitive package resolution.
-- Do not add `minimumReleaseAgeExclude` entries unless the user explicitly accepts the supply-chain tradeoff.
+- Before any `pnpm create`, `pnpm dlx`, or `pnpm add` resolves packages, create the parent `pnpm-workspace.yaml` from inside the directory where the command will run:
+  ```yaml
+  packages:
+    - <app-name>
+  minimumReleaseAge: 4320
+  resolutionMode: highest
+  ```
+- NEVER add `minimumReleaseAgeExclude`. If a required package is too fresh, pin to the newest compatible version that is at least three days old. If no compatible package set exists yet, stop and say the stack needs to wait for packages to age into policy.
+- To find the newest allowed version, run `pnpm view <package> time --json` and choose the newest stable version older than the three-day cutoff.
 
 # Bootstrapping
-1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
-2. For SDK 56: `pnpm create expo-app@latest --template default@sdk-56`. For Expo Go-first SDK 55 work: `pnpm create expo-app@latest --template default@sdk-55`.
-3. Run `pnpm exec expo install --fix` after dependency changes so Expo aligns package versions to the selected SDK.
-4. Add NativeWind v4 only if the project will use it, following the official Expo Router instructions exactly.
-5. Set up Expo Router with a `(tabs)` group and a stack for modals.
-6. Configure path aliases (`@/` → `./src/`) in both tsconfig and Metro/Babel config as required by the selected template.
+1. Create the parent project directory and add the `pnpm-workspace.yaml` above with `<app-name>` set to the app directory you will scaffold.
+2. From that parent directory, run `pnpm create expo-app@latest <app-name> --template default@sdk-55`.
+3. If you want SDK 56, first verify every package in the SDK 56 template is older than the three-day cutoff. If any package is too fresh, use SDK 55 or wait; do not bypass the age gate.
+4. Run `pnpm exec expo install --fix` after dependency changes so Expo aligns package versions to the selected SDK.
+5. Add NativeWind v4 only if the project will use it, following the official Expo Router instructions exactly.
+6. Set up Expo Router with a `(tabs)` group and a stack for modals.
+7. Configure path aliases (`@/` → `./src/`) in both tsconfig and Metro/Babel config as required by the selected template.
 
 # Quality gates
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript`.
-- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run fmt:check && pnpm run test`.
-- Keep an Expo health script such as `doctor` = `expo-doctor` when the project includes native dependencies.
+- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `expo lint`, `test` = `vitest run`, `test:watch` = `vitest`, `check` = `pnpm run typecheck && pnpm run lint && pnpm run test`.
+- If raw `tsc --noEmit` fails on generated CSS imports, add a small declaration file for `*.css` and `*.module.css`; do not weaken TypeScript strictness.
+- Keep an Expo health script such as `doctor` = `expo-doctor` when it is reliable in the project layout. In monorepos, verify any Metro config warning points at an actual app-level config before treating it as a blocker.
 - Run `pnpm run check`, `pnpm run doctor`, and verify the app in Expo Go when compatible. If the selected SDK/native module set is not Expo Go-compatible, create and run a development build instead.
 
 # Architecture

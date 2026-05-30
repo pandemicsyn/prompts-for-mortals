@@ -10,7 +10,7 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 | `web` | The Web of Pixels | SaaS, dashboard, auth, billing, email, full-stack React | TanStack Start, React, TanStack Router, Tailwind, shadcn/ui, Drizzle, Better Auth, Stripe, Resend | Cloudflare Workers |
 | `api` | The Server Keep | HTTP API, webhook API, typed routes, validation, rate limiting | Hono, Cloudflare Workers, Drizzle, D1 or PlanetScale, Zod | Cloudflare Workers |
 | `cli` | The Command-Line Blade | CLI, terminal tool, command, single binary, developer utility | Go, Cobra, Viper when needed, Lip Gloss, goreleaser | Cross-platform Go binaries |
-| `mobile` | The Pocket Companion | iOS app, Android app, Expo, React Native | Expo SDK 56, React Native 0.85, React 19.2.3, Expo Router, NativeWind when useful, Zustand, TanStack Query, expo-sqlite, Drizzle | Expo Go when compatible; development builds and EAS otherwise |
+| `mobile` | The Pocket Companion | iOS app, Android app, Expo, React Native | Expo SDK 55 strict-age default, Expo Router, NativeWind when useful, Zustand, TanStack Query, expo-sqlite, Drizzle | Expo Go when compatible; development builds and EAS otherwise |
 | `desktop` | The Desktop Familiar | native desktop app, macOS app, Windows app, Linux app, tray, native menus | Tauri 2, Rust, Vite, React, TypeScript, Tailwind | Tauri build artifacts |
 | `extension` | The Browser Enchantment | Chrome extension, Firefox extension, popup, content script, options page | WXT, React, TypeScript, Tailwind, Manifest V3 | Browser extension packages |
 | `bot` | The Messenger Spirit | Discord bot, slash command, interaction endpoint | Hono, Cloudflare Workers, discord-interactions, D1 or KV | Cloudflare Workers |
@@ -21,7 +21,8 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Use D1 by default; recommend PlanetScale for production relational workloads that need managed scale, branching, or MySQL compatibility.
 - Do not use Neon.
 - Use strict TypeScript for JS/TS starters.
-- Add supply-chain age gates before JS installs: pnpm `minimumReleaseAge: 4320`.
+- Add supply-chain age gates before JS installs with a parent `pnpm-workspace.yaml` that includes `packages`, `minimumReleaseAge: 4320`, and `resolutionMode: highest`.
+- Never add `minimumReleaseAgeExclude`. Pin to the newest compatible package versions older than the three-day cutoff, or stop when no compatible age-allowed package set exists yet.
 - For Go starters, use Go modules, commit `go.mod` and `go.sum`, and run `go mod tidy` after dependency changes.
 - Install quality tooling before feature work.
 - Add a single `check` script that runs typecheck, lint, format check, and tests.
@@ -35,6 +36,7 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Use Astro 6, not Next.js, Gatsby, or Jekyll.
 - Add Tailwind v4 through `@tailwindcss/vite`, not the deprecated Astro Tailwind integration.
 - Add MDX, sitemap, and typed content collections.
+- Use a coherent age-allowed Astro core plus first-party integration set. Do not mix fresh Astro integrations with older Astro core, and do not bypass the age gate.
 - Deploy with `@astrojs/cloudflare`, `output: "server"`, Wrangler, and an explicit `deploy` script.
 - Quality tools: `oxlint`, `oxfmt`, Prettier for `.astro`, `@astrojs/check`, TypeScript.
 
@@ -44,13 +46,17 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Use Drizzle, not Prisma.
 - Use Better Auth, not NextAuth or Auth.js.
 - Use Stripe subscriptions through Customer Portal and Resend plus React Email.
+- Use the docs-style C3 command for TanStack Start and do not add `--accept-defaults`.
 - Install Better Auth, env validation, Stripe, Resend, React Email, and shadcn/ui explicitly before building app pages.
+- Treat current shadcn CLI setup as interactive or manually commit the generated config; do not rely on old flags like `--base-color neutral`.
+- Run dev/build once before raw typecheck so TanStack generates `src/routeTree.gen.ts`.
 - Configure Wrangler for Workers, including compatibility flags needed by auth/runtime dependencies.
 - Use D1 first; PlanetScale when production MySQL compatibility or managed branching matters.
 
 ### `api`
 
 - Use Hono with `@hono/zod-validator`, `@hono/zod-openapi`, Zod, Drizzle, Drizzle Kit, and Workers.
+- Scaffold with current C3 flags: `pnpm create cloudflare@latest <app-name> --type=hello-world --lang=ts --no-deploy --no-open --no-git --accept-defaults`.
 - For D1, create the database with Wrangler and paste the binding into config.
 - For PlanetScale, use Drizzle's PlanetScale serverless path.
 - Test routes and bindings with Workers-aware tests rather than mocking Cloudflare APIs when possible.
@@ -72,12 +78,12 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 
 ### `mobile`
 
-- Use Expo SDK 56 with React Native 0.85 and React 19.2.3 when native builds are acceptable; use SDK 55 only for Expo Go-first work during the SDK 56 transition.
+- Use Expo SDK 55 as the strict-age default today. Use SDK 56 only after all required SDK 56 packages are older than the three-day cutoff.
 - Use Expo Router, not direct `@react-navigation/*` imports.
-- Use NativeWind only when Tailwind-style utilities help; do not add Reanimated by default.
+- Use NativeWind only when Tailwind-style utilities help. Do not build animation architecture around Reanimated unless the app needs it; some Expo templates may include Reanimated/worklets as dependencies.
 - Use Zustand, TanStack Query, expo-sqlite, and Drizzle when the app needs those layers.
 - Keep `app/` for routes only; put components and business logic under `src/`.
-- Include an Expo health script when native dependencies are present.
+- Include an Expo health script when native dependencies are present, but verify monorepo/scratch false positives before treating doctor warnings as blockers.
 
 ### `desktop`
 
