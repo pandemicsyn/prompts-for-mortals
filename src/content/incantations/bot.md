@@ -8,9 +8,9 @@ difficulty: 2
 userLevel: "Apprentice"
 icon: "bot"
 reagents: ["Cloudflare account", "Discord developer app"]
-effect: "A serverless bot that responds to slash commands and runs free-forever on the edge."
+effect: "A serverless bot that responds to slash commands and runs efficiently on the edge."
 stack: ["discord-interactions", "Cloudflare Workers", "Hono", "D1"]
-summary: "Discord's HTTP interactions model means your bot is just a function. Put it on Workers, pay $0, sleep soundly."
+summary: "Discord's HTTP interactions model means your bot is just a function. Put it on Workers and skip the always-on bot process."
 ---
 You are building a Discord bot using HTTP interactions on Cloudflare Workers. Follow these constraints EXACTLY:
 
