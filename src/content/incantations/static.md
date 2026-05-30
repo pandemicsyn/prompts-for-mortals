@@ -16,7 +16,7 @@ You are building a static site or blog. Follow these constraints EXACTLY:
 
 # Stack (non-negotiable)
 - Astro 6+ — NOT Next.js, NOT Gatsby, NOT Jekyll
-- Tailwind CSS via the official integration
+- Tailwind CSS v4 via the official Vite plugin — NOT the deprecated `@astrojs/tailwind` integration
 - MDX for content (`@astrojs/mdx`)
 - Astro Content Collections with typed schemas (zod)
 - Deployed to Cloudflare Workers by default via `@astrojs/cloudflare` and Wrangler. Use Cloudflare Pages only for a purely static site when the user explicitly wants static hosting.
@@ -29,9 +29,10 @@ You are building a static site or blog. Follow these constraints EXACTLY:
 # Bootstrapping
 1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
 2. `pnpm create astro@latest` — pick "Empty", TypeScript strict.
-3. `pnpm astro add tailwind mdx sitemap`
-4. Add `@astrojs/cloudflare`, set `output: 'server'`, and configure Wrangler for Workers deployment.
-5. If the user explicitly requests static-only hosting, document the tradeoff and switch to `output: 'static'` with Cloudflare Pages.
+3. `pnpm astro add mdx sitemap`
+4. Add Tailwind v4 with `pnpm add tailwindcss @tailwindcss/vite`, import `@import "tailwindcss";` in the global CSS entry, and add `tailwindcss()` to `vite.plugins` in `astro.config.mjs`.
+5. Add `@astrojs/cloudflare`, set `output: 'server'`, and configure Wrangler for Workers deployment.
+6. If the user explicitly requests static-only hosting, document the tradeoff and switch to `output: 'static'` with Cloudflare Pages.
 
 # Quality gates
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt prettier prettier-plugin-astro @astrojs/check typescript`.

@@ -31,10 +31,11 @@ You are building an HTTP API. Follow these constraints EXACTLY:
 # Bootstrapping
 1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
 2. `pnpm create cloudflare@latest -- --type=hello-world --ts`
-3. `pnpm add hono @hono/zod-validator zod drizzle-orm`
-4. For D1: `wrangler d1 create <name>`, paste binding into Wrangler config.
-5. For PlanetScale: `pnpm add @planetscale/database` and use Drizzle's PlanetScale serverless driver.
-6. Drizzle config: `drizzle.config.ts` pointed at `src/db/schema.ts`.
+3. `pnpm add hono @hono/zod-validator @hono/zod-openapi zod drizzle-orm`
+4. `pnpm add -D drizzle-kit wrangler`
+5. For D1: `pnpm wrangler d1 create <name>`, paste binding into Wrangler config.
+6. For PlanetScale: `pnpm add @planetscale/database` and use Drizzle's PlanetScale serverless driver.
+7. Drizzle config: `drizzle.config.ts` pointed at `src/db/schema.ts`.
 
 # Quality gates
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript @cloudflare/vitest-pool-workers`.
@@ -62,7 +63,7 @@ You are building an HTTP API. Follow these constraints EXACTLY:
 # Operational
 - Structured JSON logs via a tiny logger middleware. Include request id (`crypto.randomUUID()`) on every log line and in response headers.
 - `/health` returns `{ ok: true, version }`. Used by uptime checks.
-- Migrations via Drizzle Kit, checked into git, run via `wrangler d1 migrations apply`.
+- Migrations via Drizzle Kit, checked into git, run via `pnpm wrangler d1 migrations apply <DATABASE_OR_BINDING> --remote` for production D1.
 
 # Now build me:
 [DESCRIBE THE API — e.g. "an API for a habit tracker — users, habits, completions, streaks — with API keys for third-party access"]

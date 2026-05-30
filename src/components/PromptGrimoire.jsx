@@ -77,6 +77,8 @@ function ToggleMoon({ size = 22, className = "", style }) {
 
 const RARITY_ORDER = ["common", "rare", "epic", "legendary"];
 const RARITY_LABEL = { common: "Common", rare: "Rare", epic: "Epic", legendary: "Legendary" };
+const CATALOG_ORDER = ["static", "web", "api", "cli", "mobile", "desktop", "extension", "bot"];
+const CATALOG_RANK = new Map(CATALOG_ORDER.map((id, index) => [id, index]));
 
 function getInitialTheme() {
   try {
@@ -537,7 +539,9 @@ export default function PromptGrimoire({ incantations = [] }) {
       );
     }
     return arr.slice().sort((a, b) =>
-      RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity) || a.difficulty - b.difficulty
+      (CATALOG_RANK.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (CATALOG_RANK.get(b.id) ?? Number.MAX_SAFE_INTEGER) ||
+      RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity) ||
+      a.difficulty - b.difficulty
     );
   }, [incantations, rarity, query]);
 

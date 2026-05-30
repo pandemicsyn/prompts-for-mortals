@@ -33,10 +33,11 @@ You are building a full-stack web application. Follow these constraints EXACTLY:
 # Bootstrapping
 1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
 2. `pnpm create cloudflare@latest <app-name> --framework=tanstack-start`
-3. Add shadcn/ui using the Vite/TanStack-compatible setup — pick neutral and CSS variables.
-4. Install Drizzle and the chosen database driver. For D1: `pnpm add drizzle-orm` + `pnpm add -D drizzle-kit`. For PlanetScale: `pnpm add drizzle-orm @planetscale/database` + `pnpm add -D drizzle-kit`.
-5. Install Better Auth with the Drizzle adapter and TanStack Start cookie plugin. Wire it BEFORE building any pages.
-6. Configure Wrangler for Workers deployment, including `nodejs_compat` or `nodejs_als` if Better Auth needs AsyncLocalStorage support. The deploy script should build the app and run `wrangler deploy`.
+3. Add shadcn/ui using the TanStack Start/Vite-compatible setup: `pnpm dlx shadcn@latest init`, then add only the components you use. Pick neutral and CSS variables.
+4. Install app dependencies: `pnpm add better-auth @t3-oss/env-core sonner stripe resend react-email zod`.
+5. Install Drizzle and the chosen database driver. For D1: `pnpm add drizzle-orm` + `pnpm add -D drizzle-kit wrangler`. For PlanetScale: `pnpm add drizzle-orm @planetscale/database` + `pnpm add -D drizzle-kit`.
+6. Wire Better Auth with the Drizzle adapter and `tanstackStartCookies()` as the final plugin BEFORE building any pages.
+7. Configure Wrangler for Workers deployment, including `nodejs_compat` or `nodejs_als` if Better Auth/runtime dependencies need AsyncLocalStorage support. The deploy script should build the app and run `wrangler deploy`.
 
 # Quality gates
 - Install quality tooling before feature work: `pnpm add -D oxlint oxfmt vitest typescript`.
@@ -61,7 +62,7 @@ You are building a full-stack web application. Follow these constraints EXACTLY:
 # Production checklist
 - Env vars typed via `@t3-oss/env-core`. App refuses to start if any required binding or secret is missing.
 - Rate limit auth + payment routes with Cloudflare rate limiting/WAF where available, or Upstash Ratelimit if the app needs an app-level fallback.
-- Set up `pnpm db:generate` and `pnpm db:migrate` scripts. For D1, migrations apply through Wrangler. For PlanetScale, migrations target the PlanetScale branch workflow. Migrations are checked into git.
+- Set up `pnpm db:generate` and `pnpm db:migrate` scripts. For D1, migrations apply through `pnpm wrangler d1 migrations apply <DATABASE_OR_BINDING> --remote`. For PlanetScale, migrations target the PlanetScale branch workflow. Migrations are checked into git.
 - Add a `/api/health` route and a Cloudflare scheduled Worker/cron trigger or external uptime check that pings it.
 
 # Now build me:

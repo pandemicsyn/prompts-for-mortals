@@ -9,19 +9,20 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 | `static` | The Eternal Page | site, blog, docs, marketing page, portfolio | Astro 6, Tailwind, MDX, Astro Content Collections | Cloudflare Workers by default; Pages only for explicit static-only hosting |
 | `web` | The Web of Pixels | SaaS, dashboard, auth, billing, email, full-stack React | TanStack Start, React, TanStack Router, Tailwind, shadcn/ui, Drizzle, Better Auth, Stripe, Resend | Cloudflare Workers |
 | `api` | The Server Keep | HTTP API, webhook API, typed routes, validation, rate limiting | Hono, Cloudflare Workers, Drizzle, D1 or PlanetScale, Zod | Cloudflare Workers |
-| `bot` | The Messenger Spirit | Discord bot, Slack bot, slash command, interaction endpoint | Hono, Cloudflare Workers, discord-interactions, D1 or KV | Cloudflare Workers |
-| `extension` | The Browser Enchantment | Chrome extension, Firefox extension, popup, content script, options page | WXT, React, TypeScript, Tailwind, Manifest V3 | Browser extension packages |
-| `mobile` | The Pocket Companion | iOS app, Android app, Expo, React Native | Expo SDK, Expo Router, NativeWind, Zustand, TanStack Query, expo-sqlite, Drizzle | Expo Go and EAS |
+| `cli` | The Command-Line Blade | CLI, terminal tool, command, single binary, developer utility | Go, Cobra, Viper when needed, Lip Gloss, goreleaser | Cross-platform Go binaries |
+| `mobile` | The Pocket Companion | iOS app, Android app, Expo, React Native | Expo SDK 56, React Native 0.85, React 19.2.3, Expo Router, NativeWind when useful, Zustand, TanStack Query, expo-sqlite, Drizzle | Expo Go when compatible; development builds and EAS otherwise |
 | `desktop` | The Desktop Familiar | native desktop app, macOS app, Windows app, Linux app, tray, native menus | Tauri 2, Rust, Vite, React, TypeScript, Tailwind | Tauri build artifacts |
-| `cli` | The Command-Line Blade | CLI, terminal tool, command, single binary, developer utility | Bun, TypeScript, Commander, Clack, Picocolors, Zod | Bun compiled binary |
+| `extension` | The Browser Enchantment | Chrome extension, Firefox extension, popup, content script, options page | WXT, React, TypeScript, Tailwind, Manifest V3 | Browser extension packages |
+| `bot` | The Messenger Spirit | Discord bot, slash command, interaction endpoint | Hono, Cloudflare Workers, discord-interactions, D1 or KV | Cloudflare Workers |
 
 ## Shared Defaults
 
 - Prefer Cloudflare Workers over Pages for deployed web/server surfaces.
 - Use D1 by default; recommend PlanetScale for production relational workloads that need managed scale, branching, or MySQL compatibility.
 - Do not use Neon.
-- Use strict TypeScript.
-- Add supply-chain age gates before installs: pnpm `minimumReleaseAge: 4320`, Bun `minimumReleaseAge = 259200`.
+- Use strict TypeScript for JS/TS starters.
+- Add supply-chain age gates before JS installs: pnpm `minimumReleaseAge: 4320`.
+- For Go starters, use Go modules, commit `go.mod` and `go.sum`, and run `go mod tidy` after dependency changes.
 - Install quality tooling before feature work.
 - Add a single `check` script that runs typecheck, lint, format check, and tests.
 - Run checks and a build or deploy dry run before completion.
@@ -32,7 +33,8 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 ### `static`
 
 - Use Astro 6, not Next.js, Gatsby, or Jekyll.
-- Add Tailwind, MDX, sitemap, and typed content collections.
+- Add Tailwind v4 through `@tailwindcss/vite`, not the deprecated Astro Tailwind integration.
+- Add MDX, sitemap, and typed content collections.
 - Deploy with `@astrojs/cloudflare`, `output: "server"`, Wrangler, and an explicit `deploy` script.
 - Quality tools: `oxlint`, `oxfmt`, Prettier for `.astro`, `@astrojs/check`, TypeScript.
 
@@ -42,12 +44,13 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Use Drizzle, not Prisma.
 - Use Better Auth, not NextAuth or Auth.js.
 - Use Stripe subscriptions through Customer Portal and Resend plus React Email.
+- Install Better Auth, env validation, Stripe, Resend, React Email, and shadcn/ui explicitly before building app pages.
 - Configure Wrangler for Workers, including compatibility flags needed by auth/runtime dependencies.
 - Use D1 first; PlanetScale when production MySQL compatibility or managed branching matters.
 
 ### `api`
 
-- Use Hono with `@hono/zod-validator`, Zod, Drizzle, and Workers.
+- Use Hono with `@hono/zod-validator`, `@hono/zod-openapi`, Zod, Drizzle, Drizzle Kit, and Workers.
 - For D1, create the database with Wrangler and paste the binding into config.
 - For PlanetScale, use Drizzle's PlanetScale serverless path.
 - Test routes and bindings with Workers-aware tests rather than mocking Cloudflare APIs when possible.
@@ -56,7 +59,7 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 
 - Use HTTP interactions on Workers, not a long-running gateway process.
 - Use `discord-interactions` for Discord signature verification and types.
-- Store required app values as Worker secrets.
+- Store Discord public key, application id, and bot token as Worker secrets.
 - Test signature verification, command dispatch, and deferred replies.
 
 ### `extension`
@@ -64,12 +67,15 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Use WXT, not Plasmo or raw manifest scaffolding.
 - Use React and TypeScript for UI surfaces.
 - Use scoped Tailwind in content scripts through shadow DOM.
+- Use WXT's built-in storage wrapper from `#imports`.
 - Keep match patterns explicit; avoid `<all_urls>` unless truly needed.
 
 ### `mobile`
 
-- Use Expo SDK with Expo Router, not raw React Navigation setup.
-- Use NativeWind, Zustand, TanStack Query, expo-sqlite, and Drizzle.
+- Use Expo SDK 56 with React Native 0.85 and React 19.2.3 when native builds are acceptable; use SDK 55 only for Expo Go-first work during the SDK 56 transition.
+- Use Expo Router, not direct `@react-navigation/*` imports.
+- Use NativeWind only when Tailwind-style utilities help; do not add Reanimated by default.
+- Use Zustand, TanStack Query, expo-sqlite, and Drizzle when the app needs those layers.
 - Keep `app/` for routes only; put components and business logic under `src/`.
 - Include an Expo health script when native dependencies are present.
 
@@ -78,15 +84,17 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Use Tauri 2, not Electron.
 - Use React, Vite, TypeScript, Tailwind, and Rust commands.
 - Use Biome for this starter's JS formatting/linting because the website prompt explicitly chooses it.
+- Add required Tauri plugins explicitly: store, window-state, global-shortcut, and updater when the prompt asks for those features.
 - Route every Rust-to-JS bridge call through a typed wrapper.
 - Add Rust `fmt`, `clippy`, and test checks.
 
 ### `cli`
 
-- Use Bun as runtime, package manager, and bundler.
-- Use Commander, Clack, Picocolors, and Zod.
-- Build to a local compiled binary with `bun build --compile`.
-- Run the compiled binary's `--help` before completion.
+- Use Go 1.26+ and Cobra, not Node-based CLI scaffolding.
+- Add Viper only when persistent config or env binding is required.
+- Use Go modules, pure command functions, table-driven tests, and `text/tabwriter` for tabular output.
+- Build to local cross-platform-ready binaries and release with goreleaser.
+- Run `make check`, `make build`, and the compiled binary's `--help` before completion.
 
 ## Ambiguity Rules
 

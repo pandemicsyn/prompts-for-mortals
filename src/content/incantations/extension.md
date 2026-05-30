@@ -46,14 +46,14 @@ You are building a browser extension. Follow these constraints EXACTLY:
 - Shared code in `utils/` and `components/`.
 
 # Messaging & storage
-- Use WXT's `@wxt-dev/storage` wrapper around `browser.storage` with typed schemas. Never raw `browser.storage.*`.
+- Use WXT's built-in storage wrapper from `#imports` with typed storage items. Never raw `browser.storage.*`.
 - Use `webext-bridge` or WXT's messaging for popup ↔ background ↔ content. Define message types in a single `messages.ts`.
 - Validate every incoming message with zod. Treat content scripts as untrusted.
 
 # UX rules
 - The popup opens to USEFUL state in <100ms. If you need to load anything, render a skeleton first.
 - Options page has a "Reset to defaults" button.
-- Content script injections wait for `document.idle` unless they truly need earlier.
+- Content script injections use `runAt: "document_idle"` unless they truly need earlier.
 - Every permission in the manifest has a comment explaining why it's needed.
 
 # Distribution

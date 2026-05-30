@@ -1,6 +1,6 @@
 ---
 name: prompts-for-mortals
-description: Choose and execute opinionated app starters from Prompts for Mere Mortals. Use when a user asks Codex to start, scaffold, plan, or build a static site/blog, full-stack web app, API, Discord or Slack bot, browser extension, mobile app, desktop app, or CLI and wants strong defaults for stack selection, Cloudflare deployment, package safety, quality gates, and next steps.
+description: Choose and execute opinionated app starters from Prompts for Mere Mortals. Use when a user asks Codex to start, scaffold, plan, or build a static site/blog, full-stack web app, API, Discord bot, browser extension, mobile app, desktop app, or CLI and wants strong defaults for stack selection, Cloudflare deployment, package safety, quality gates, and next steps.
 ---
 
 # Prompts for Mere Mortals
@@ -14,7 +14,7 @@ Use this skill to turn an app idea into one of the Prompts for Mere Mortals star
 3. Apply the starter's non-negotiable stack and banned substitutions.
 4. Configure supply-chain safety before installing packages:
    - pnpm projects: create or update `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
-   - Bun projects: create or update `bunfig.toml` with `[install] minimumReleaseAge = 259200`.
+   - Go projects: use modules, commit `go.mod` and `go.sum`, and run `go mod tidy` after dependency changes.
    - Do not add package-age exclusions unless the user explicitly accepts that tradeoff.
 5. Install quality tooling before feature work unless the starter reference says otherwise.
 6. Implement in the host repo's existing style when modifying an existing project. For new projects, scaffold the starter directly.
@@ -38,7 +38,7 @@ Read [references/incantations.md](references/incantations.md) before choosing a 
 - Marketing site, docs, blog, portfolio: `static`
 - SaaS, dashboard, auth, billing, transactional email: `web`
 - HTTP API, webhook API, validation-heavy service: `api`
-- Discord or Slack command bot: `bot`
+- Discord command bot: `bot`
 - Browser popup, content script, extension settings: `extension`
 - iOS or Android app: `mobile`
 - Native desktop app: `desktop`

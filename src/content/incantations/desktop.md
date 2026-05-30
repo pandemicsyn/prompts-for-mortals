@@ -31,7 +31,9 @@ You are building a cross-platform desktop application. Follow these constraints 
 2. Run `pnpm create tauri-app@latest` and pick: React, TypeScript, Vite, pnpm.
 3. Add Tailwind v4 via `@tailwindcss/vite`. Configure dark mode via `class` on <html>.
 4. Set up Biome with `pnpm dlx @biomejs/biome init`.
-5. Add a `pnpm tauri dev` script and verify the window opens.
+5. Add required Tauri plugins: `pnpm tauri add store window-state global-shortcut updater`.
+6. Add the matching plugin permissions to `src-tauri/capabilities/default.json`.
+7. Add a `pnpm tauri dev` script and verify the window opens.
 
 # Quality gates
 - Use Biome here because this stack explicitly chose it. Do not add ESLint or Prettier.

@@ -7,65 +7,64 @@ rarity: "rare"
 difficulty: 2
 castTime: "15–30 min"
 icon: "cli"
-reagents: ["Bun or Node 20+", "A terminal you love"]
-effect: "A single-binary CLI with subcommands, gorgeous output, and `--help` that doesn't suck."
-stack: ["Bun", "Commander", "Clack prompts", "Picocolors", "Zod"]
-summary: "Bun compiles your TS into a single binary. Clack gives you the prompts that ship with Astro. You will look like a wizard."
+reagents: ["Go 1.26+", "A terminal you love"]
+effect: "A fast, cross-platform Go CLI with subcommands, useful help, typed config, and release binaries."
+stack: ["Go", "Cobra", "Viper", "Lip Gloss", "goreleaser"]
+summary: "Go gives you boring-good binaries. Cobra gives the command surface structure. Ship a real tool instead of a pile of shell scripts."
 ---
 You are building a command-line tool. Follow these constraints EXACTLY:
 
 # Stack (non-negotiable)
-- Bun 1.1+ as runtime, package manager, AND bundler (`bun build --compile` produces a single binary)
-- TypeScript, strict
-- Commander.js for argument parsing (NOT yargs, NOT raw process.argv)
-- @clack/prompts for any interactive input — NOT inquirer
-- picocolors for color (NOT chalk, it's 14x larger)
-- zod for validating config files and API responses
+- Go 1.26+ with modules — NOT Node, NOT Python, NOT shell scripts.
+- Cobra for command routing and help text — NOT hand-rolled flag parsing.
+- Viper only when the CLI has persistent config or env var binding. Do not add it for a one-command utility.
+- Charmbracelet Lip Gloss for styled terminal output when styling helps. Keep plain output for pipes and `--json`.
+- Standard library `testing` plus focused table tests. Add third-party test helpers only when they earn their keep.
 
 # Supply-chain defaults
-- Use Bun's package manager.
-- Add and commit `bunfig.toml` before installing dependencies:
-  ```toml
-  [install]
-  minimumReleaseAge = 259200
-  ```
-- Three days is the default age gate for direct and transitive package resolution. Do not add `minimumReleaseAgeExcludes` entries unless the user explicitly accepts the supply-chain tradeoff.
+- Use Go modules. Commit `go.mod` and `go.sum`.
+- Pin release tooling with `go install <module>@<version>` in documented setup steps or a `tools.go` file. Do not rely on whatever happens to be globally installed.
+- Run `go mod tidy` after dependency changes and review the diff.
 
 # Bootstrapping
-1. `bun init -y`
-2. Create `bunfig.toml` with `[install] minimumReleaseAge = 259200`.
-3. Add deps: `bun add commander @clack/prompts picocolors zod`
-4. Set `"bin": { "your-cli": "./dist/cli.js" }` in package.json.
-5. Add a build script: `bun build src/cli.ts --compile --outfile dist/your-cli`
+1. Create the project directory.
+2. `go mod init github.com/<owner>/<repo>`
+3. Add dependencies: `go get github.com/spf13/cobra@latest github.com/charmbracelet/lipgloss@latest`.
+4. If config is required, add `go get github.com/spf13/viper@latest` and keep config loading isolated in `internal/config`.
+5. Create `cmd/<tool>/main.go`, `internal/cmd/root.go`, and one `internal/cmd/<name>.go` file per subcommand.
+6. Add a local build script or Makefile target: `go build -trimpath -ldflags "-s -w -X main.version=$(git describe --tags --always --dirty)" -o dist/<tool> ./cmd/<tool>`.
+7. For release setup, choose a goreleaser version, install it with `go install github.com/goreleaser/goreleaser/v2@<version>`, then add `.goreleaser.yaml`.
 
 # Quality gates
-- Install quality tooling before feature work: `bun add -D oxlint oxfmt typescript`.
-- Add package scripts: `typecheck` = `tsc --noEmit`, `lint` = `oxlint`, `lint:fix` = `oxlint --fix`, `fmt` = `oxfmt`, `fmt:check` = `oxfmt --check`, `test` = `bun test`, `check` = `bun run typecheck && bun run lint && bun run fmt:check && bun run test`.
-- Keep `build` explicit and make it produce a local binary from the TypeScript entrypoint.
-- Run `bun run check` and the compiled binary's `--help` before saying the work is done.
+- Add `make check` or `just check` that runs: `gofmt -w .`, `go vet ./...`, `go test ./...`, and `go mod tidy`.
+- Add `make build` that produces a local binary in `dist/`.
+- Add `make snapshot-help` or an equivalent test that verifies the root command and every subcommand has useful `--help`.
+- Run `make check`, `make build`, and `./dist/<tool> --help` before saying the work is done.
 
 # Architecture
-- Entry: `src/cli.ts` ONLY wires the program. Each subcommand is its own file in `src/commands/`.
-- Each command exports `{ register(program) }` and a pure `run(opts)` function. The pure function is what you unit test.
-- Config lives in `~/.config/<toolname>/config.json`, validated with zod on every read.
+- `cmd/<tool>/main.go` only calls `cmd.Execute(version)`.
+- `internal/cmd/root.go` builds the root Cobra command.
+- Each command lives in `internal/cmd/<name>.go` and calls a pure function in `internal/<domain>/`.
+- Config lives in `~/.config/<toolname>/config.yaml` only when the tool needs it. Validate into typed structs before use.
 - Cache anything network-fetched in `~/.cache/<toolname>/`. Respect `--no-cache`.
 
 # Output conventions
-- A consistent log helper: `log.info`, `log.warn`, `log.error`, `log.success` with picocolors prefixes (`ℹ`, `⚠`, `✖`, `✓`).
-- Long operations use `@clack/prompts` spinners. Never raw console.log spam.
-- Tables via a tiny helper, NOT a 50KB table library.
+- A consistent output helper: `out.Info`, `out.Warn`, `out.Error`, `out.Success`.
+- Long operations use clear status lines. Do not add a spinner unless the command is truly interactive and attached to a TTY.
+- Tables use a tiny local helper over `text/tabwriter`, NOT a huge table dependency.
 - Respect `NO_COLOR` and detect TTY — pipe to a file should produce clean text.
 - `--json` flag on every command that produces data, for scripting.
 
 # Quality
-- Every command has `--help` with examples (`program.addHelpText('after', '...')`).
+- Every command has `--help` with examples through Cobra's `Example` field or long description.
 - Exit codes: 0 success, 1 user error, 2 system error. Always.
-- A `--verbose` flag that pipes through to a single debug() helper.
+- A `--verbose` flag that pipes through to a single debug helper.
 
 # Distribution
-- GitHub Actions matrix builds for darwin-arm64, darwin-x64, linux-x64, win-x64.
-- Publish to npm AND attach binaries to a GitHub release.
-- A one-liner install script: `curl -fsSL https://your.site/install.sh | bash`.
+- GitHub Actions matrix builds for darwin-arm64, darwin-amd64, linux-amd64, linux-arm64, windows-amd64.
+- Release with goreleaser and attach binaries plus checksums to GitHub Releases.
+- Optional Homebrew tap for macOS/Linux install.
+- A one-liner install script only if you host and checksum-verify release artifacts: `curl -fsSL https://your.site/install.sh | sh`.
 - If the CLI needs an update manifest, docs site, telemetry intake, license check, sync API, or hosted install script, default to Cloudflare Workers. Use R2 for downloadable artifacts and Pages only when the hosted surface is static-only.
 
 # Now build me:

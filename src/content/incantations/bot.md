@@ -1,7 +1,7 @@
 ---
 id: "bot"
 title: "The Messenger Spirit"
-subtitle: "Bind a bot to Discord or Slack"
+subtitle: "Bind a bot to Discord slash commands"
 school: "Necromancy"
 rarity: "rare"
 difficulty: 2
@@ -34,7 +34,7 @@ The websocket gateway requires an always-on process. HTTP interactions let Disco
 1. Create the project directory and add `pnpm-workspace.yaml` with `minimumReleaseAge: 4320`.
 2. `pnpm create cloudflare@latest -- --type=hello-world --ts`
 3. Add deps: `pnpm add hono discord-interactions`
-4. In Discord Developer Portal: create app, copy PUBLIC_KEY, APPLICATION_ID, BOT_TOKEN. Put PUBLIC_KEY and APP_ID as Worker secrets via `wrangler secret put`.
+4. In Discord Developer Portal: create app, copy PUBLIC_KEY, APPLICATION_ID, and BOT_TOKEN. Put all three in Worker secrets via `pnpm wrangler secret put DISCORD_PUBLIC_KEY`, `pnpm wrangler secret put DISCORD_APPLICATION_ID`, and `pnpm wrangler secret put DISCORD_BOT_TOKEN`.
 5. Set the "Interactions Endpoint URL" to your Worker URL. Discord will verify it.
 
 # Quality gates
@@ -61,4 +61,4 @@ The websocket gateway requires an always-on process. HTTP interactions let Disco
 Start by listing the slash commands and their options. Then implement `register.ts` and one command end-to-end before adding the rest.
 
 # Finish with next steps
-End your response with a concise "Next steps" section that tells the user exactly what to run, which Cloudflare secrets/resources to configure, what to set in the Discord or Slack app console, what to review, and what to build next.
+End your response with a concise "Next steps" section that tells the user exactly what to run, which Cloudflare secrets/resources to configure, what to set in the Discord app console, what to review, and what to build next.
