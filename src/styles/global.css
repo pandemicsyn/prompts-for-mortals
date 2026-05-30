@@ -737,6 +737,102 @@ body {
   background: linear-gradient(135deg, var(--cream), var(--cream-dk));
 }
 
+.contribution-callout {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 2.8vw, 2rem);
+  overflow: hidden;
+  border: 4px solid var(--outline);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 9% 18%, oklch(87% 0.20 124 / 0.45), transparent 22%),
+    radial-gradient(circle at 95% 0%, oklch(70% 0.23 352 / 0.24), transparent 28%),
+    linear-gradient(135deg, var(--cream), var(--cream-dk));
+  box-shadow: 8px 8px 0 0 var(--outline);
+  color: var(--ink);
+  padding: clamp(1.15rem, 2.4vw, 1.65rem);
+}
+
+.contribution-callout::after {
+  content: "";
+  position: absolute;
+  inset: auto 1.1rem 0.9rem auto;
+  width: 4.75rem;
+  height: 4.75rem;
+  border: 2px solid var(--outline);
+  border-radius: 50%;
+  background:
+    linear-gradient(45deg, transparent 46%, var(--outline) 47% 53%, transparent 54%),
+    linear-gradient(-45deg, transparent 46%, var(--outline) 47% 53%, transparent 54%),
+    var(--mint);
+  opacity: 0.16;
+  pointer-events: none;
+  transform: rotate(-8deg);
+}
+
+.contribution-callout > * {
+  position: relative;
+  z-index: 1;
+}
+
+.council-seal {
+  display: grid;
+  place-items: center;
+  width: clamp(4.25rem, 7vw, 5.5rem);
+  aspect-ratio: 1;
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  background: var(--hot-pink);
+  box-shadow: 5px 5px 0 0 var(--outline);
+  color: var(--cream);
+  transform: rotate(-5deg);
+}
+
+.council-seal svg {
+  grid-area: 1 / 1;
+  color: var(--gold);
+  fill: currentColor;
+  stroke: var(--outline);
+  stroke-width: 2;
+  opacity: 0.72;
+  transform: rotate(8deg);
+}
+
+.council-seal span {
+  grid-area: 1 / 1;
+  transform: translateY(0.05rem);
+  color: var(--ink);
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.contribution-copy {
+  min-width: 0;
+}
+
+.council-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  border: 2px solid var(--outline);
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 0.18rem 0.72rem;
+}
+
+.contribution-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
 .chunky-sm {
   border: 2px solid var(--outline);
   border-radius: 12px;
@@ -844,6 +940,20 @@ footer strong,
 
   .parchment-strip {
     padding: 1.5rem;
+  }
+
+  .contribution-callout {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.35rem;
+  }
+
+  .council-seal {
+    width: 4rem;
+  }
+
+  .contribution-button {
+    width: 100%;
+    white-space: normal;
   }
 }
 

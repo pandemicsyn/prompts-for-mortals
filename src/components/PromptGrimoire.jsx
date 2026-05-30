@@ -552,6 +552,7 @@ export default function PromptGrimoire({ incantations = [] }) {
         </div>
         <div className="flex items-center gap-2 md:gap-3">
           <a href="#tome" className="btn-pill">The Tome</a>
+          <a href="#council" className="btn-pill hidden sm:inline-flex">Add Prompt</a>
           <a href="#about" className="btn-pill hidden md:inline-flex">About</a>
           <button
             type="button"
@@ -596,6 +597,30 @@ export default function PromptGrimoire({ incantations = [] }) {
             </div>
           )}
         </div>
+
+        <section id="council" className="mx-auto mt-14 max-w-6xl px-6">
+          <div className="contribution-callout" aria-labelledby="council-title">
+            <div className="council-seal" aria-hidden="true">
+              <Sparkle size={34} />
+              <span>PR</span>
+            </div>
+            <div className="contribution-copy">
+              <p className="council-label">Council of Mages</p>
+              <h2 id="council-title" className="font-display text-3xl leading-tight md:text-4xl">Add a Prompt to the Codex</h2>
+              <p className="font-body mt-3 max-w-3xl text-lg leading-relaxed">
+                If you want to add a prompt to the codex, or think the stack of a spell could be improved, open a PR and add it to the tome.
+              </p>
+            </div>
+            <a
+              href="https://github.com/pandemicsyn/prompts-for-mortals/compare"
+              className="btn-fat lime contribution-button"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open a Pull Request
+            </a>
+          </div>
+        </section>
 
         <section id="about" className="mx-auto mt-24 max-w-3xl px-6">
           <div className="parchment-strip">
