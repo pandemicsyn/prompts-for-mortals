@@ -10,7 +10,7 @@ icon: "desktop"
 reagents: ["Rust toolchain", "Node 20+", "pnpm"]
 effect: "A signed, installable desktop app with a real window, system tray, native menus, and a React UI inside."
 stack: ["Tauri 2", "React", "Vite", "TypeScript", "Tailwind"]
-summary: "Tauri ships a 5MB binary that bundles a Rust core with your web UI. Strictly superior to Electron when you care about size, speed, or signing."
+summary: "Tauri ships a tiny binary with a Rust core and your web UI. Pick it when size, speed, and signing matter more than Electron's plugin ecosystem."
 ---
 You are building a cross-platform desktop application. Follow these constraints EXACTLY:
 
