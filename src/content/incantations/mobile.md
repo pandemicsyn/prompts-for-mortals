@@ -10,7 +10,7 @@ icon: "mobile"
 reagents: ["Node LTS", "Expo account", "A phone or simulator"]
 effect: "A real native app on your phone fast — Expo Go when compatible, a development build when native modules demand it."
 stack: ["Expo SDK 55", "React Native 0.83", "React 19.2", "Expo Router", "TypeScript"]
-summary: "Expo is the only sane way to start a mobile app in 2026. File-based routing, OTA updates, EAS builds, and a clean path from QR-code prototype to native build."
+summary: "Expo is the fastest practical way to start a serious mobile app in 2026: file-based routing, OTA updates, EAS builds, and a clean path from QR-code prototype to native build."
 ---
 You are building a mobile app for iOS and Android using Expo. Follow these constraints EXACTLY:
 

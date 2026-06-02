@@ -439,6 +439,14 @@ body {
   box-shadow: 10px 10px 0 0 var(--outline);
 }
 
+.spell-card:target {
+  outline: 4px solid var(--gold);
+  outline-offset: 6px;
+  box-shadow:
+    10px 10px 0 0 var(--outline),
+    0 0 0 10px oklch(84% 0.16 86 / 0.24);
+}
+
 .card-band {
   position: relative;
   display: flex;
@@ -580,6 +588,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   border-top: var(--outline-w) solid var(--outline);
   background: var(--ink);
   gap: 0.75rem;
@@ -588,11 +597,21 @@ body {
 }
 
 .card-copy {
+  flex: 999 1 11rem;
+}
+
+.card-link {
   flex: 1 1 auto;
+  min-width: 4.75rem;
+}
+
+.card-link.active {
+  background: var(--lime);
+  color: var(--ink);
 }
 
 .card-detail {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   background: var(--cream);
 }
 
@@ -735,6 +754,40 @@ body {
 
 .cast-note {
   background: linear-gradient(135deg, var(--cream), var(--cream-dk));
+}
+
+.skill-callout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  border: 4px solid var(--outline);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 8% 15%, oklch(76% 0.14 224 / 0.30), transparent 24%),
+    linear-gradient(135deg, var(--ink), var(--ink-soft));
+  box-shadow: 8px 8px 0 0 var(--outline);
+  color: var(--cream);
+  padding: clamp(1.15rem, 2.4vw, 1.65rem);
+}
+
+.skill-callout .caption {
+  color: var(--gold);
+}
+
+.skill-command {
+  display: block;
+  overflow-x: auto;
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  background: oklch(10% 0.06 294 / 0.72);
+  box-shadow: inset 0 0 0 1px oklch(97% 0.07 86 / 0.12);
+  color: var(--gold);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.55;
+  padding: 0.8rem 0.9rem;
+  white-space: pre;
 }
 
 .contribution-callout {

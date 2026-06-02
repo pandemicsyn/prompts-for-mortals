@@ -8,9 +8,9 @@ difficulty: 1
 userLevel: "First Year"
 icon: "static"
 reagents: ["Node 20+", "Markdown"]
-effect: "A statically-generated site with MDX, RSS, sitemap, Cloudflare deployment, and a perfect Lighthouse score."
+effect: "A statically-generated site with MDX, RSS, sitemap, Cloudflare deployment, and a strong Lighthouse baseline."
 stack: ["Astro", "Tailwind", "MDX", "Astro Content"]
-summary: "Astro ships zero JS by default. For a marketing site or blog, nothing else comes close."
+summary: "Astro ships zero JS by default. For a marketing site or blog, that keeps the baseline fast, simple, and easy to deploy."
 ---
 You are building a static site or blog. Follow these constraints EXACTLY:
 

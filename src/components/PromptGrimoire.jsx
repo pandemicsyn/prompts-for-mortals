@@ -79,6 +79,12 @@ const RARITY_ORDER = ["common", "rare", "epic", "legendary"];
 const RARITY_LABEL = { common: "Common", rare: "Rare", epic: "Epic", legendary: "Legendary" };
 const CATALOG_ORDER = ["static", "web", "api", "cli", "mobile", "desktop", "extension", "bot"];
 const CATALOG_RANK = new Map(CATALOG_ORDER.map((id, index) => [id, index]));
+const REPO_URL = "https://github.com/pandemicsyn/prompts-for-mortals";
+const SKILL_INSTALL_COMMAND = "npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals -a codex";
+
+function getSpellHash(spell) {
+  return `spell-${spell.id}`;
+}
 
 function getInitialTheme() {
   try {
@@ -190,12 +196,13 @@ function FilterBar({ rarity, setRarity, query, setQuery, resultCount }) {
   );
 }
 
-function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loadingAction }) {
+function SpellCard({ spell, onOpen, onCopy, onShareLink, copied, copyFailed, linkCopied, loadingAction }) {
   const titleId = `spell-title-${spell.id}`;
   const isLoading = Boolean(loadingAction);
 
   return (
     <article
+      id={getSpellHash(spell)}
       className={`spell-card rarity-${spell.rarity}`}
     >
       <div className="card-band">
@@ -249,6 +256,15 @@ function SpellCard({ spell, onOpen, onCopy, copied, copyFailed, loadingAction })
           disabled={isLoading}
         >
           {loadingAction === "copy" ? "Loading" : copyFailed ? "Copy Failed" : copied ? "Copied" : "Copy Prompt"}
+        </button>
+        <button
+          type="button"
+          onClick={() => onShareLink(spell)}
+          className={`btn-pill compact card-link ${linkCopied ? "active" : ""}`}
+          aria-label={`Copy share link for ${spell.title}`}
+          disabled={isLoading}
+        >
+          {linkCopied ? "Linked" : "Link"}
         </button>
         <button
           type="button"
@@ -401,7 +417,7 @@ function Modal({ spell, onClose }) {
             <h4 className="font-display section-title mb-2.5 text-xl"><span className="text-pink" aria-hidden="true">♥</span> How to Cast</h4>
             <ol className="font-body modal-list list-decimal space-y-1.5 pl-5">
               <li>Press <strong>Copy Scroll</strong> above.</li>
-              <li>Open Claude, Codex, Cursor, or another coding assistant.</li>
+              <li>Open Kilo, Codex, Claude, or another coding assistant.</li>
               <li>Paste the incantation. Replace the bracketed <span className="font-mono text-sm">[DESCRIBE...]</span> line with what you actually want.</li>
               <li>Run it, then review the proposed work before approving changes.</li>
             </ol>
@@ -441,6 +457,23 @@ function Footer() {
   );
 }
 
+function SkillCallout() {
+  return (
+    <section id="skill" className="mx-auto mt-10 max-w-6xl px-6">
+      <div className="skill-callout" aria-labelledby="skill-title">
+        <div>
+          <p className="caption mb-2">Companion Skill</p>
+          <h2 id="skill-title" className="font-display text-2xl leading-tight md:text-3xl">Install the Grimoire in Codex</h2>
+          <p className="font-body mt-3 max-w-3xl text-base leading-relaxed md:text-lg">
+            Use the same starter defaults inside Codex. Install the skill directly from this repo, then ask for <strong>$prompts-for-mortals</strong> when you want a new app scaffold.
+          </p>
+        </div>
+        <code className="skill-command">{SKILL_INSTALL_COMMAND}</code>
+      </div>
+    </section>
+  );
+}
+
 /**
  * @param {{ incantations?: Array<Record<string, any>> }} props
  */
@@ -450,6 +483,7 @@ export default function PromptGrimoire({ incantations = [] }) {
   const [open, setOpen] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [copyFailedId, setCopyFailedId] = useState(null);
+  const [linkCopiedId, setLinkCopiedId] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
   const [loadingAction, setLoadingAction] = useState(null);
   const [catalogStatus, setCatalogStatus] = useState("");
@@ -497,6 +531,18 @@ export default function PromptGrimoire({ incantations = [] }) {
       setLoadingId(null);
       setLoadingAction(null);
     }
+  };
+
+  const handleShareLink = async (spell) => {
+    const url = new URL(window.location.href);
+    url.hash = getSpellHash(spell);
+    const ok = await copyPrompt(url.toString());
+    setLinkCopiedId(ok ? spell.id : null);
+    setCatalogStatus(ok ? `Copied share link for ${spell.title}.` : `Could not copy link for ${spell.title}.`);
+    window.setTimeout(() => {
+      setLinkCopiedId(null);
+      setCatalogStatus("");
+    }, 1800);
   };
 
   const handleCopy = async (spell) => {
@@ -558,8 +604,10 @@ export default function PromptGrimoire({ incantations = [] }) {
         </div>
         <div className="flex items-center gap-2 md:gap-3">
           <a href="#tome" className="btn-pill">The Tome</a>
+          <a href="#skill" className="btn-pill hidden sm:inline-flex">Skill</a>
           <a href="#council" className="btn-pill hidden sm:inline-flex">Add Prompt</a>
           <a href="#about" className="btn-pill hidden md:inline-flex">About</a>
+          <a href={REPO_URL} className="btn-pill hidden md:inline-flex" target="_blank" rel="noreferrer">GitHub</a>
           <button
             type="button"
             onClick={toggleTheme}
@@ -587,8 +635,10 @@ export default function PromptGrimoire({ incantations = [] }) {
                 spell={spell}
                 onOpen={handleOpen}
                 onCopy={handleCopy}
+                onShareLink={handleShareLink}
                 copied={copiedId === spell.id}
                 copyFailed={copyFailedId === spell.id}
+                linkCopied={linkCopiedId === spell.id}
                 loadingAction={loadingId === spell.id ? loadingAction : null}
               />
             ))}
@@ -630,6 +680,8 @@ export default function PromptGrimoire({ incantations = [] }) {
             </a>
           </div>
         </section>
+
+        <SkillCallout />
 
         <section id="about" className="mx-auto mt-24 max-w-3xl px-6">
           <div className="parchment-strip">

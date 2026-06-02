@@ -8,9 +8,9 @@ difficulty: 3
 userLevel: "Practitioner"
 icon: "api"
 reagents: ["Cloudflare account", "A database"]
-effect: "A typed, validated, rate-limited HTTP API deployed worldwide on the edge for free."
+effect: "A typed, validated, rate-limited HTTP API deployed worldwide on the edge with a practical free-tier path."
 stack: ["Hono", "Cloudflare Workers", "Drizzle", "D1 or PlanetScale", "Zod"]
-summary: "Hono is what Express wishes it were. Tiny, fast, and you can run it on Workers, Bun, Node, or Deno without changes."
+summary: "Hono keeps the API small, typed, and fast. Run it on Workers first, with a clean path to Bun, Node, or Deno when needed."
 ---
 You are building an HTTP API. Follow these constraints EXACTLY:
 

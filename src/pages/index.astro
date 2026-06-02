@@ -5,7 +5,9 @@ import "../styles/global.css";
 
 const title = "Prompts for Mere Mortals";
 const description =
-  "A curated library of opinionated AI coding prompts for Claude, Codex, and other coding assistants. Pick a stack, copy a prompt, and start with stronger defaults.";
+  "A curated library of opinionated AI coding prompts for Kilo, Codex, Claude, and friends. Pick a stack, copy a prompt, and start with stronger defaults.";
+const canonical = "https://promptsformortals.com/";
+const socialImage = `${canonical}og-image.png`;
 const incantations: Array<Record<string, unknown>> = (await getCollection("incantations"))
   .map(({ data }) => ({ ...data, promptUrl: `/api/incantations/${encodeURIComponent(data.id)}.json` }));
 ---
@@ -19,9 +21,19 @@ const incantations: Array<Record<string, unknown>> = (await getCollection("incan
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://promptsformortals.com/" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Prompts for Mere Mortals, opinionated AI coding prompts in a colorful grimoire style." />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content="Prompts for Mere Mortals, opinionated AI coding prompts in a colorful grimoire style." />
     <meta name="theme-color" content="#15102a" />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" />
     <title>{title}</title>
   </head>
