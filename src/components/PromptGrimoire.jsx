@@ -80,7 +80,7 @@ const RARITY_LABEL = { common: "Common", rare: "Rare", epic: "Epic", legendary: 
 const CATALOG_ORDER = ["static", "web", "api", "cli", "mobile", "desktop", "extension", "bot"];
 const CATALOG_RANK = new Map(CATALOG_ORDER.map((id, index) => [id, index]));
 const REPO_URL = "https://github.com/pandemicsyn/prompts-for-mortals";
-const SKILL_INSTALL_COMMAND = "npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals -a codex";
+const SKILL_INSTALL_COMMAND = "npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals";
 
 function getSpellHash(spell) {
   return `spell-${spell.id}`;
@@ -142,7 +142,8 @@ function Hero({ theme }) {
 
       <p className="font-body relative z-10 mx-auto mt-10 max-w-2xl text-lg leading-relaxed md:text-xl">
         A pocket-sized collection of <strong className="text-gold">battle-tested prompts</strong> for{" "}
-        <strong className="text-pink">Kilo</strong>, <strong className="text-mint">Codex</strong>, <strong className="text-gold">Claude</strong>, and friends.
+        <a className="hero-link text-pink" href="https://kilo.ai" target="_blank" rel="noreferrer">Kilo</a>,{" "}
+        <strong className="text-mint">Codex</strong>, <strong className="text-gold">Claude</strong>, and friends.
         Pick a school. Copy the scroll. Watch a real app appear.
       </p>
 
@@ -451,7 +452,7 @@ function Footer() {
           Compiled with reverence at <strong>promptsformortals.com</strong>.
           <br />Read the scroll, adjust the bracketed request, then review what your assistant changes.
         </p>
-        <p className="caption mt-6">Made for people who want useful defaults before clever wording.</p>
+        <p className="caption mt-6">Made for the normal folk, that just want to vibe.</p>
       </div>
     </footer>
   );
@@ -463,9 +464,9 @@ function SkillCallout() {
       <div className="skill-callout" aria-labelledby="skill-title">
         <div>
           <p className="caption mb-2">Companion Skill</p>
-          <h2 id="skill-title" className="font-display text-2xl leading-tight md:text-3xl">Install the Grimoire in Codex</h2>
+          <h2 id="skill-title" className="font-display text-2xl leading-tight md:text-3xl">Install the Companion Skill</h2>
           <p className="font-body mt-3 max-w-3xl text-base leading-relaxed md:text-lg">
-            Use the same starter defaults inside Codex. Install the skill directly from this repo, then ask for <strong>$prompts-for-mortals</strong> when you want a new app scaffold.
+            Use the same starter defaults inside your coding agent. Install the skill directly from this repo, then ask for <strong>$prompts-for-mortals</strong> when you want a new app scaffold.
           </p>
         </div>
         <code className="skill-command">{SKILL_INSTALL_COMMAND}</code>
@@ -690,7 +691,7 @@ export default function PromptGrimoire({ incantations = [] }) {
               <h2 className="font-display text-3xl md:text-4xl">On the Nature of This Work</h2>
             </div>
             <p className="font-body drop-cap text-lg leading-relaxed">
-              Large language models are useful builders, but vague requests still produce vague software. Each scroll here is opinionated on purpose: it picks libraries, file layout, and conventions so the model does not have to guess. Adapt the defaults when you have a reason, then read the result before you ship it.
+              Large language models are useful builders, but vague requests still produce vague software. Each scroll here is opinionated on purpose: it picks libraries, file layout, and conventions so the model doesn't have to guess, and users don't accidentally steer it toward something old and busted.
             </p>
           </div>
         </section>

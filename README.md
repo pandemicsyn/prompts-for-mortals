@@ -25,16 +25,16 @@ Add or edit prompts by changing those files. Frontmatter is validated in `src/co
 
 ## Companion Skill
 
-Install the Prompts for Mere Mortals companion skill for Codex:
+Install the Prompts for Mere Mortals companion skill:
 
 ```sh
-npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals -a codex
+npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals
 ```
 
 For a global install:
 
 ```sh
-npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals -a codex -g
+npx skills add https://github.com/pandemicsyn/prompts-for-mortals/tree/main/skills/prompts-for-mortals -g
 ```
 
 Use the direct skill path above instead of `--all`; this repo also contains local helper skills under `.agents/skills/`.

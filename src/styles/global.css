@@ -197,6 +197,19 @@ body {
 .text-plum { color: var(--plum); }
 .text-tangerine { color: var(--tangerine); }
 
+.hero-link {
+  font-weight: 900;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 58%, transparent);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.16em;
+}
+
+.hero-link:hover,
+.hero-link:focus-visible {
+  text-decoration-color: currentColor;
+}
+
 .sparkle-deco {
   position: absolute;
   pointer-events: none;
