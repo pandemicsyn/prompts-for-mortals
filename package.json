@@ -21,7 +21,7 @@
     "@fontsource/nunito": "^5.2.7",
     "@fontsource/titan-one": "^5.2.8",
     "@tailwindcss/vite": "^4.1.18",
-    "astro": "^6.3.5",
+    "astro": "^6.4.6",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "tailwindcss": "^4.1.18"
