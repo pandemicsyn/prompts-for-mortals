@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 function SchoolIcon({ kind, className = "w-7 h-7" }) {
   const props = {
@@ -84,6 +84,11 @@ const SKILL_INSTALL_COMMAND = "npx skills add https://github.com/pandemicsyn/pro
 
 function getSpellHash(spell) {
   return `spell-${spell.id}`;
+}
+
+function getSpellIdFromHash(hash) {
+  const cleanHash = hash.replace(/^#/, "");
+  return cleanHash.startsWith("spell-") ? cleanHash.slice("spell-".length) : null;
 }
 
 function getInitialTheme() {
@@ -341,7 +346,7 @@ function Modal({ spell, onClose }) {
         aria-labelledby="spell-dialog-title"
       >
         <div className="spellbook-header">
-          <button ref={closeRef} onClick={onClose} className="x-btn absolute right-5 top-5" type="button" aria-label="Close">×</button>
+          <button ref={closeRef} onClick={onClose} className="x-btn absolute right-5 top-5 z-20" type="button" aria-label="Close">×</button>
           <div className="relative z-10 flex items-center gap-5">
             <div className="glyph-badge modal-glyph">
               <SchoolIcon kind={spell.icon} className="h-9 w-9" />
@@ -490,6 +495,7 @@ export default function PromptGrimoire({ incantations = [] }) {
   const [catalogStatus, setCatalogStatus] = useState("");
   const [theme, setTheme] = useState(getInitialTheme);
   const promptCache = useRef(new Map());
+  const openRequestRef = useRef(0);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -500,7 +506,7 @@ export default function PromptGrimoire({ incantations = [] }) {
     }
   }, [theme]);
 
-  const loadPrompt = async (spell) => {
+  const loadPrompt = useCallback(async (spell) => {
     if (spell.prompt) return spell;
     if (promptCache.current.has(spell.id)) {
       return { ...spell, prompt: promptCache.current.get(spell.id) };
@@ -511,28 +517,85 @@ export default function PromptGrimoire({ incantations = [] }) {
     const data = await response.json();
     promptCache.current.set(spell.id, data.prompt);
     return { ...spell, prompt: data.prompt };
-  };
+  }, []);
 
-  const handleOpen = async (spell) => {
+  const handleOpen = useCallback(async (spell, { updateHash = true } = {}) => {
+    const requestId = openRequestRef.current + 1;
+    openRequestRef.current = requestId;
+
+    if (updateHash) {
+      const url = new URL(window.location.href);
+      const hash = getSpellHash(spell);
+      if (url.hash !== `#${hash}`) {
+        url.hash = hash;
+        window.history.pushState(null, "", url);
+      }
+    }
+
     setLoadingId(spell.id);
     setLoadingAction("open");
     setCopyFailedId(null);
     setCatalogStatus(`Loading ${spell.title} prompt.`);
     try {
-      setOpen(await loadPrompt(spell));
-      setCatalogStatus("");
-    } catch {
-      setCopyFailedId(spell.id);
-      setCatalogStatus(`Could not load ${spell.title} prompt. Try again.`);
-      window.setTimeout(() => {
-        setCopyFailedId(null);
+      const fullSpell = await loadPrompt(spell);
+      if (requestId === openRequestRef.current) {
+        setOpen(fullSpell);
         setCatalogStatus("");
-      }, 2600);
+      }
+    } catch {
+      if (requestId === openRequestRef.current) {
+        setCopyFailedId(spell.id);
+        setCatalogStatus(`Could not load ${spell.title} prompt. Try again.`);
+        window.setTimeout(() => {
+          setCopyFailedId(null);
+          setCatalogStatus("");
+        }, 2600);
+      }
     } finally {
-      setLoadingId(null);
-      setLoadingAction(null);
+      if (requestId === openRequestRef.current) {
+        setLoadingId(null);
+        setLoadingAction(null);
+      }
     }
-  };
+  }, [loadPrompt]);
+
+  const handleClose = useCallback(() => {
+    openRequestRef.current += 1;
+    setOpen(null);
+    setLoadingId(null);
+    setLoadingAction(null);
+
+    const url = new URL(window.location.href);
+    if (getSpellIdFromHash(url.hash)) {
+      window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    const syncSpellFromHash = () => {
+      const id = getSpellIdFromHash(window.location.hash);
+      if (!id) {
+        openRequestRef.current += 1;
+        setOpen(null);
+        setLoadingId(null);
+        setLoadingAction(null);
+        return;
+      }
+
+      const spell = incantations.find(item => item.id === id);
+      if (spell) {
+        handleOpen(spell, { updateHash: false });
+      }
+    };
+
+    syncSpellFromHash();
+    window.addEventListener("hashchange", syncSpellFromHash);
+    window.addEventListener("popstate", syncSpellFromHash);
+    return () => {
+      window.removeEventListener("hashchange", syncSpellFromHash);
+      window.removeEventListener("popstate", syncSpellFromHash);
+    };
+  }, [handleOpen, incantations]);
 
   const handleShareLink = async (spell) => {
     const url = new URL(window.location.href);
@@ -699,7 +762,7 @@ export default function PromptGrimoire({ incantations = [] }) {
 
       <Footer />
 
-      <Modal spell={open} onClose={() => setOpen(null)} />
+      <Modal spell={open} onClose={handleClose} />
     </div>
   );
 }
