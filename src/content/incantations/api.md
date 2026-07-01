@@ -72,10 +72,17 @@ You are building an HTTP API. Follow these constraints EXACTLY:
 - `/health` returns `{ ok: true, version }`. Used by uptime checks.
 - Migrations via Drizzle Kit, checked into git, run via `pnpm wrangler d1 migrations apply <DATABASE_OR_BINDING> --remote` for production D1.
 
-# Now build me:
-[DESCRIBE THE API — e.g. "an API for a habit tracker — users, habits, completions, streaks — with API keys for third-party access"]
+# First ask me what to build
+Before creating files, ask what HTTP API I want to build in plain English.
 
-Begin with the resource list and the schema. Get sign-off, then implement one resource end-to-end with tests before moving on.
+Also ask:
+- Who or what will consume the API.
+- The core resources, actions, and relationships.
+- What auth model is needed: API keys, user sessions, service tokens, or public endpoints.
+- Whether it needs rate limits, webhooks, background jobs, or third-party integrations.
+- Which database target I prefer, if I already know: D1 or PlanetScale.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Once you have enough detail, summarize the resource list and schema. Get sign-off, then implement one resource end-to-end with tests before moving on.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, which Cloudflare bindings/secrets to configure, what to test, what to deploy, and what to build next.

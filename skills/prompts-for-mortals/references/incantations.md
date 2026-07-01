@@ -27,6 +27,7 @@ Use this file to choose the right starter and apply its compact defaults. The fu
 - Install quality tooling before feature work.
 - Add a single `check` script that runs typecheck, lint, format check, and tests.
 - Run checks and a build or deploy dry run before completion.
+- Before creating files, ask the user what they want to build in plain English. Ask only follow-up questions that unblock the work; the agent is the engineering expert and should make reasonable product and implementation decisions when the answer is obvious or low-risk.
 - End with next steps for the user.
 
 ## Starter Defaults

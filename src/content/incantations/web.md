@@ -73,10 +73,18 @@ You are building a full-stack web application. Follow these constraints EXACTLY:
 - Set up `pnpm db:generate` and `pnpm db:migrate` scripts. For D1, migrations apply through `pnpm wrangler d1 migrations apply <DATABASE_OR_BINDING> --remote`. For PlanetScale, migrations target the PlanetScale branch workflow. Migrations are checked into git.
 - Add a `/api/health` route and a Cloudflare scheduled Worker/cron trigger or external uptime check that pings it.
 
-# Now build me:
-[DESCRIBE THE APP — e.g. "a SaaS that lets teams share password-protected dashboards with their clients, with per-seat pricing"]
+# First ask me what to build
+Before creating files, ask what full-stack web app I want to build in plain English.
 
-Begin with the schema, then auth, then one full vertical slice (UI + action + query) end-to-end before adding more.
+Also ask:
+- Who the app is for and the first core workflow.
+- Whether it needs users, teams, roles, invitations, permissions, or admin surfaces.
+- Whether billing, subscriptions, transactional email, uploads, or notifications are needed.
+- The main data objects and relationships.
+- Whether D1 is acceptable by default, or if I already know I need PlanetScale.
+- What should exist in the first usable version versus later.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Once you have enough detail, summarize the product scope and data model. Begin with the schema, then auth, then one full vertical slice (UI + action + query) end-to-end before adding more.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, what to configure, what to review, what to deploy to Cloudflare, and what to build next.

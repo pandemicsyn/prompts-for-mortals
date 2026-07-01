@@ -62,10 +62,17 @@ The websocket gateway requires an always-on process. HTTP interactions let Disco
 - Errors → ephemeral reply with a friendly message + log to Workers logs.
 - Use Discord components (buttons, selects, modals) instead of multi-message flows.
 
-# Now build me:
-[DESCRIBE THE BOT — e.g. "a bot with /standup that DMs each team member at 9am and posts the summary in #standups"]
+# First ask me what to build
+Before creating files, ask what I want this Discord bot to do in plain English.
 
-Start by listing the slash commands and their options. Then implement `register.ts` and one command end-to-end before adding the rest.
+Also ask:
+- Which server or community it is for, and who will use it.
+- The slash commands, buttons, selects, or modals it should expose.
+- Whether commands should be public, admin-only, role-gated, or ephemeral.
+- Whether it needs scheduled jobs, DMs, persistent storage, or external integrations.
+- Whether it is for one private server or intended for broader installation.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Once you have enough detail, summarize the command surface and options. Then implement `register.ts` and one command end-to-end before adding the rest.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, which Cloudflare secrets/resources to configure, what to set in the Discord app console, what to review, and what to build next.

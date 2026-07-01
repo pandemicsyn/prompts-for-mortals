@@ -65,10 +65,17 @@ You are building a cross-platform desktop application. Follow these constraints 
 - Configure auto-updates via `tauri-plugin-updater` pointing at a placeholder JSON endpoint.
 - If the app needs a sync API, updater manifest, download page, landing site, hosted install script, or asset delivery, default to Cloudflare Workers. Use R2 for files and Pages only for a purely static site when Workers would add no value.
 
-# Now build me:
-[DESCRIBE THE APP HERE — e.g. "a markdown scratchpad with full-text search across all notes"]
+# First ask me what to build
+Before creating files, ask what desktop app I want to build in plain English.
 
-Stop and ask questions if any of the above conflicts with what I want. Otherwise produce the full project tree, then implement the features end-to-end. Show me `pnpm tauri dev` running before adding polish.
+Also ask:
+- Which platforms matter first: macOS, Windows, Linux, or all three.
+- The main workflow and the first usable version.
+- Whether it needs local files, local database storage, sync, background tasks, tray behavior, global shortcuts, or native menus.
+- Whether it will be private, internally distributed, or signed and shipped publicly.
+- Whether it needs a companion API, updater manifest, download page, or hosted assets.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Stop and ask questions if any of the above constraints conflict with what I want. Once you have enough detail, summarize the plan, produce the full project tree, then implement the features end-to-end. Show me `pnpm tauri dev` running before adding polish.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, what to configure, what to review, and what to build next.

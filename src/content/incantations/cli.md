@@ -67,10 +67,17 @@ You are building a command-line tool. Follow these constraints EXACTLY:
 - A one-liner install script only if you host and checksum-verify release artifacts: `curl -fsSL https://your.site/install.sh | sh`.
 - If the CLI needs an update manifest, docs site, telemetry intake, license check, sync API, or hosted install script, default to Cloudflare Workers. Use R2 for downloadable artifacts and Pages only when the hosted surface is static-only.
 
-# Now build me:
-[DESCRIBE THE TOOL — e.g. "a CLI that takes a Postgres URL and outputs a markdown summary of every table, with row counts"]
+# First ask me what to build
+Before creating files, ask what command-line tool I want to build in plain English.
 
-Start with the command list and flag surface, get me to approve, then implement.
+Also ask:
+- The main job the tool should perform and the inputs it should accept.
+- The commands, subcommands, and flags I expect.
+- The output formats I need: human-readable text, tables, JSON, files, or all of these.
+- Whether it needs config files, environment variables, credentials, or persistent state.
+- Whether it will be private, distributed as binaries, published through Homebrew, or released on GitHub.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Once you have enough detail, summarize the command list and flag surface, get me to approve, then implement.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, what to configure, what to review, what to publish or deploy, and what to build next.

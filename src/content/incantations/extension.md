@@ -68,10 +68,17 @@ You are building a browser extension. Follow these constraints EXACTLY:
 - Add release workflow that produces signed .zip for the Chrome Web Store and a Firefox .xpi.
 - If the extension needs auth, sync, billing, AI calls, webhooks, or a companion API, default to Cloudflare Workers with KV/D1/R2 as appropriate. Do not put secrets in the extension.
 
-# Now build me:
-[DESCRIBE THE EXTENSION — e.g. "an extension that highlights every dollar amount on a page and shows it in my preferred currency"]
+# First ask me what to build
+Before creating files, ask what I want this browser extension to do in plain English.
 
-Begin by listing the entrypoints you need and the permissions. Then implement one entrypoint at a time.
+Also ask:
+- Which browsers matter first: Chrome, Firefox, Edge, or all three.
+- Whether I plan to publish it to browser stores or keep it private.
+- What page content it needs to read, annotate, block, replace, or modify.
+- Which surfaces it needs: popup, options page, background script, content script, side panel, or devtools panel.
+- Whether it needs accounts, payments, synced settings, AI calls, webhooks, or a companion API.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Once you have enough detail, summarize the entrypoints and permissions. Then implement one entrypoint at a time.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, what to configure in each browser store, what to review, what to deploy to Cloudflare if applicable, and what to build next.

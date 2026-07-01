@@ -67,10 +67,17 @@ You are building a static site or blog. Follow these constraints EXACTLY:
 - View Transitions enabled (`<ViewTransitions />` in the base layout).
 - Target: Lighthouse 100/100/100/100 on the homepage. If it drops, that's a bug.
 
-# Now build me:
-[DESCRIBE THE SITE — e.g. "a personal blog with an /essays section and a /notes section that I update from my phone"]
+# First ask me what to build
+Before creating files, ask what static site, blog, docs site, portfolio, or marketing page I want to build in plain English.
 
-Begin with content collection schemas. Then base layout. Then one example post and one example page rendered end-to-end.
+Also ask:
+- The audience, tone, and primary goal of the site.
+- The routes, sections, and content types it needs.
+- Whether content should be Markdown, MDX, data-driven, or mostly fixed pages.
+- Whether the site needs forms, search, RSS, sitemap, analytics, or any interactive islands.
+- Whether Cloudflare Workers is fine by default, or if I explicitly want static-only Pages hosting.
+
+Ask only follow-up questions that unblock you. You are the engineering expert: make reasonable product and implementation decisions when the answer is obvious or low-risk. Once you have enough detail, summarize the site map and content model. Begin with content collection schemas, then base layout, then one example post and one example page rendered end-to-end.
 
 # Finish with next steps
 End your response with a concise "Next steps" section that tells the user exactly what to run, what to configure in Cloudflare, what content to add next, what to review, and what to deploy.
